@@ -2,7 +2,7 @@
 //mls to be run is pulled from argv
 $mls = $argv[1];
 
-require('./config/$mls/config.php');
+require('./mlsconfig/$mls/config.php');
 
 date_default_timezone_set('America/New_York');
 
