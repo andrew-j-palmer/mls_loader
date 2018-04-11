@@ -16,7 +16,10 @@ $config->setLoginUrl("$url")
 
 $rets = new \PHRETS\Session($config);
 
-$connect = $rets->Login();
-
+if ($connect = $rets->Login()) {
+    echo "connected";
+} else {
+    echo "connection failed";
+}
 
 ?>
