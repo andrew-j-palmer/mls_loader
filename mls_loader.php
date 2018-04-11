@@ -22,6 +22,8 @@ if ($connect = $rets->Login()) {
     echo "connection failed\n";
 }
 
+$system = $rets->GetSystemMetadata();
+
 $resources = $system->getResources();
 $classes = $resources->first()->getClasses();
 var_dump($classes);
