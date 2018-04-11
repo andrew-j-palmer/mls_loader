@@ -6,4 +6,7 @@ $UA = '';
 $UAPass = '123456';
 $version = 'RETS/1.5';
 
+$resource = 'Property';
+$class = 'A';
+$query = 'PictureCount > 100';
 ?>

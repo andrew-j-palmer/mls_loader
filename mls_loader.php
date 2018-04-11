@@ -1,11 +1,14 @@
 <?php
-//mls to be run is pulled from argv
-$mls = $argv[1];
+/* mls to be run - name is pulled from argv,
+*which is used to open a folder with config vars 
+*/
 
+$mls = $argv[1];
 require("./mlsconfig/$mls/config.php");
 
-date_default_timezone_set('America/New_York');
+date_default_timezone_set('America/Chicago');
 
+//PHRETS
 require_once("vendor/autoload.php");
 
 $config = new \PHRETS\Configuration;
@@ -22,9 +25,24 @@ if ($connect = $rets->Login()) {
     echo "connection failed\n";
 }
 
-$system = $rets->GetSystemMetadata();
+$results = $rets->Search($resource, $class, $query);
 
-$resources = $system->getResources();
-$classes = $resources->first()->getClasses();
-var_dump($classes);
+// or with the additional options (with defaults shown)
+
+$results = $rets->Search(
+    $resource,
+    $class,
+    $query,
+    [
+        'QueryType' => 'DMQL2',
+        'Count' => 1, // count and records
+        'Format' => 'COMPACT-DECODED',
+        'Limit' => 5,
+        'StandardNames' => 0, // give system names
+    ]
+);
+
+foreach ($results as $record) {
+    echo $record['LIST_105'].' '.$record['LIST_0'].' '.$record['LIST_46'].' '.$record['LIST_47'].'\n';
+}
 ?>
