@@ -8,5 +8,5 @@ $version = 'RETS/1.5';
 
 $resource = 'Property';
 $class = 'A';
-$query = 'PictureCount > 100';
+$query = "(PictureCount > 100)";
 ?>
