@@ -17,9 +17,12 @@ $config->setLoginUrl("$url")
 $rets = new \PHRETS\Session($config);
 
 if ($connect = $rets->Login()) {
-    echo "connected";
+    echo "connected to $mls \n";
 } else {
-    echo "connection failed";
+    echo "connection failed\n";
 }
 
+$resources = $system->getResources();
+$classes = $resources->first()->getClasses();
+var_dump($classes);
 ?>
