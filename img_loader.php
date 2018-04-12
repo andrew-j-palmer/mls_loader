@@ -1,0 +1,3 @@
+function imageLoader() {
+    global $rets;
+}

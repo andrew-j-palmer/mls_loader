@@ -2,9 +2,20 @@
 /* mls to be run - name is pulled from argv,
 *which is used to open a folder with config vars 
 */
-
+global $mls,$rets;
 $mls = $argv[1];
+
+
+$logstring = "Started $mls pull at ".date('m/d/Y h:i:s');
+//pull in config, mappings, data transforms
 require("./mlsconfig/$mls/config.php");
+require("./mlsconfig/$mls/mappings.php");
+require("./mlsconfig/$mls/transform.php");
+require("./img_loader.php");
+
+//I'm putting mapped listings in here
+$mappedresults = array();
+
 
 date_default_timezone_set('America/Chicago');
 
@@ -19,30 +30,35 @@ $config->setLoginUrl("$url")
 
 $rets = new \PHRETS\Session($config);
 
+//check connection
 if ($connect = $rets->Login()) {
     echo "connected to $mls \n";
 } else {
     echo "connection failed\n";
 }
 
-$results = $rets->Search($resource, $class, $query);
-
-// or with the additional options (with defaults shown)
-
 $results = $rets->Search(
     $resource,
     $class,
-    $query,
+    $listingquery,
     [
         'QueryType' => 'DMQL2',
         'Count' => 1, // count and records
         'Format' => 'COMPACT-DECODED',
-        'Limit' => 5,
+        'Limit' => 10000,
         'StandardNames' => 0, // give system names
     ]
 );
 
+
 foreach ($results as $record) {
-    echo $record['LIST_105'].' '.$record['LIST_0'].' '.$record['LIST_46'].' '.$record['LIST_47'].'\n';
+    $newlisting = $listing;
+    foreach ($newlisting as $key => $item) {
+        //echo $key."\t".$record[$item]."\t".redefineVals($key, $record[$item], $newlisting, $record)."\n";
+        $newlisting[$key] = redefineVals($key, $record[$item], $newlisting,$record);
+    }
+    array_push($mappedresults, $newlisting);
 }
+//var_dump($mappedresults);
+echo $logstring."- finished with ".count($mappedresults)." transformed results at".date('m/d/Y h:i:s');
 ?>

@@ -7,6 +7,6 @@ $UAPass = '123456';
 $version = 'RETS/1.5';
 
 $resource = 'Property';
-$class = 'A';
-$query = "(PictureCount > 100)";
+$classe = 'A';
+$listingquery = '(LIST_15=1537DVHF564V,PWC_1DDI44AXS447,PWC_1DD44AXS9NC,PWC_1DDI44AXSFXJ)';
 ?>
