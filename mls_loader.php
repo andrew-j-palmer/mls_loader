@@ -52,11 +52,17 @@ $results = $rets->Search(
 
 
 foreach ($results as $record) {
+    //init empty listing using mapping model
     $newlisting = $listing;
+
+    //now go through each listing field and fill if possible
     foreach ($newlisting as $key => $item) {
         //echo $key."\t".$record[$item]."\t".redefineVals($key, $record[$item], $newlisting, $record)."\n";
         $newlisting[$key] = redefineVals($key, $record[$item], $newlisting,$record);
+
     }
+    //let's try to add photos to array at the end while we're at it
+    imageLoader($newlisting['MLSNumber']);
     array_push($mappedresults, $newlisting);
 }
 //var_dump($mappedresults);
