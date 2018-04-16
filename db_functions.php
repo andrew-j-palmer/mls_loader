@@ -5,14 +5,14 @@ $db = new PDO("mysql:host=$db_host;dbname=$db_name", $db_user, $db_pass);
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 
-function checklisting($listing, $timestamp) {
+function checkListing($listing, $timestamp) {
     //compare downloaded timestamp to listing in db. if downloaded is newer, we need to update
     global $db;
 
     //may need to convert date strings into real date objects, not sure yet
-    $query = $db->prepare("select ModificationTimestamp from listingsimport where mls = ?");
+    $query = $db->prepare("select ModificationTimestamp from listingsimport where mlsnumber = ? and mls = ?");
     $update = $query-> execute(array($listing));
-    if ($timestamp > $update) {
+    if ($timestamp !== $update) {
         return "update";
     } elseif ($timestamp == $update) {
         return "current";

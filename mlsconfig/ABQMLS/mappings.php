@@ -3,6 +3,7 @@
 
 $listing = array(
 "id" => "",
+"InData" => "",
 "AddressArea" => "LIST_29",
 "AddressCity" => "LIST_39",
 "AddressCountry" => "",
@@ -67,6 +68,6 @@ $listing = array(
 "TotalUnits" => "LIST_65",
 "Waterfront" => "",
 "YearBuilt" => "LIST_53",
-"ImageArray" => array()
+"ImageArray" => ""
 );
 ?>

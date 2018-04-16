@@ -61,6 +61,7 @@ foreach ($results as $record) {
     //now go through each listing field and fill if possible
     foreach ($newlisting as $key => $item) {
         if(!is_array($item)) {
+            // be sure to hit that "InData" column with a current time
             echo $key."\t".$record[$item]."\t".redefineVals($key, $record[$item], $newlisting, $record)."\n";
             $newlisting[$key] = redefineVals($key, $record[$item], $newlisting,$record);
         }
