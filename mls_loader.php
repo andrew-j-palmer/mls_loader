@@ -67,7 +67,7 @@ foreach ($results as $record) {
 
     }
     //let's try to add photos to array at the end while we're at it
-    imageLoader($newlisting['MLSNumber']);
+    $newlisting['ImageArray'] = imageLoader($newlisting['MLSNumber']);
     array_push($mappedresults, $newlisting);
 }
 //var_dump($mappedresults);
