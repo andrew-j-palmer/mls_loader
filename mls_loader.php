@@ -1,25 +1,26 @@
 <?php
 /* mls to be run - name is pulled from argv,
-*which is used to open a folder with config vars 
+* which is used to open a folder with config vars
+*
+* set time zone, set up log of run times
+* pull in all config and common functions
 */
 global $mls,$rets;
 $mls = $argv[1];
-
-
+date_default_timezone_set('America/Chicago');
 $logstring = "Started $mls pull at ".date('m/d/Y h:i:s');
-//pull in config, mappings, data transforms
+$logfile = "";
 require("./mlsconfig/$mls/config.php");
 require("./mlsconfig/$mls/mappings.php");
 require("./mlsconfig/$mls/transform.php");
 require("./img_loader.php");
 
+
 //I'm putting mapped listings in here
 $mappedresults = array();
 
 
-date_default_timezone_set('America/Chicago');
-
-//PHRETS
+//PHRETS config and session
 require_once("vendor/autoload.php");
 
 $config = new \PHRETS\Configuration;
@@ -37,6 +38,8 @@ if ($connect = $rets->Login()) {
     echo "connection failed\n";
 }
 
+
+//property search
 $results = $rets->Search(
     $resource,
     $class,
@@ -66,5 +69,5 @@ foreach ($results as $record) {
     array_push($mappedresults, $newlisting);
 }
 //var_dump($mappedresults);
-echo $logstring."- finished with ".count($mappedresults)." transformed results at".date('m/d/Y h:i:s');
+echo $logstring."- finished with ".count($mappedresults)." transformed results at ".date('m/d/Y h:i:s')."\n";
 ?>

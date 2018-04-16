@@ -15,6 +15,7 @@ function redefineVals($key,$val,$newlisting, $record) {
     //Define Country
         case 'AddressCountry':
             $redefineval = 'United States';
+            echo "AddressCountry => $redefineval\n";
         break;
           
     //Residential,Land,Commercial,MultiFamily,Rental
@@ -40,11 +41,13 @@ function redefineVals($key,$val,$newlisting, $record) {
                     $redefineval = "Rental";
                 break;
             } 
+            echo "ListType => $redefineval\n";
         break;
           
     //Enter a Common MLS Source Name for all property class imports (used for Grouping)
         case 'MLSName':
             $redefineval = $mls;
+            echo "MLSName => $redefineval\n";
         break; 
            
     //Used if Street Number and Street name are in different fields  
@@ -58,6 +61,7 @@ function redefineVals($key,$val,$newlisting, $record) {
                 $record[$newlisting['AddressUnitNumber']]
             );
             $redefineval = implode(" ", $addresscat);
+            echo "AddressOneLine => $redefineval\n";
         break;
          
     /*Matches Listing Status to Internal Status
