@@ -5,7 +5,8 @@ function imageLoader($listing) {
     $resultArray = array();
     $images = $rets->GetObject($resourcetype, $mediatype, $listing);
     foreach ($images as $image) {
-        array_push($resultArray, $image['Hires']);
+        $url = $image->getLocation();
+        array_push($resultArray, $url);
     }
     return $resultArray;
 }

@@ -71,6 +71,6 @@ foreach ($results as $record) {
     array_push($mappedresults, $newlisting);
 }
 //var_dump($mappedresults);
-var_dump($mappedresults);
+
 echo $logstring."- finished with ".count($mappedresults)." transformed results at ".date('m/d/Y h:i:s')."\n";
 ?>
