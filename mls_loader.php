@@ -60,8 +60,10 @@ foreach ($results as $record) {
 
     //now go through each listing field and fill if possible
     foreach ($newlisting as $key => $item) {
-        echo $key."\t".$record[$item]."\t".redefineVals($key, $record[$item], $newlisting, $record)."\n";
-        $newlisting[$key] = redefineVals($key, $record[$item], $newlisting,$record);
+        if(!is_array($item)) {
+            echo $key."\t".$record[$item]."\t".redefineVals($key, $record[$item], $newlisting, $record)."\n";
+            $newlisting[$key] = redefineVals($key, $record[$item], $newlisting,$record);
+        }
 
     }
     //let's try to add photos to array at the end while we're at it
@@ -69,5 +71,6 @@ foreach ($results as $record) {
     array_push($mappedresults, $newlisting);
 }
 //var_dump($mappedresults);
+var_dump($mappedresults);
 echo $logstring."- finished with ".count($mappedresults)." transformed results at ".date('m/d/Y h:i:s')."\n";
 ?>
