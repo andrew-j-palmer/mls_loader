@@ -1,6 +1,6 @@
 <?php
 
-function imageLoader($listing) {
+function imageLoader(&$listing) {
     global $rets, $resourcetype, $mediatype;
     $images = $rets->GetObject($resourcetype, $mediatype, $listing);
     foreach ($images as $image) {
