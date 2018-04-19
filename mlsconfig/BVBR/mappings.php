@@ -1,13 +1,13 @@
 <?php
 //listing mappings
-
+//66 items in array currently - 67 if db id is present
 $listing = array(
-"id" => "",
 "InData" => "",
 "AddressArea" => "LIST_29",
 "AddressCity" => "LIST_39",
 "AddressCountry" => "",
 "AddressCounty" => "LIST_41",
+"AddressDisplay" => "",
 "AddressOneLine" => "",
 "AddressStateOrProvince" => "LIST_40",
 "AddressStreetDirPrefix" => "LIST_33",
@@ -20,12 +20,11 @@ $listing = array(
 "Basement" => "LIST_157",
 "BathsFull" => "LIST_68",
 "BathsHalf" => "LIST_69",
-"BathsOneQuarter" => "",
+"BathsOneQuarter" => (int)0,
 "BathsThreeQuarter" => "LIST_70",
 "BathsTotal" => "LIST_67",
 "Bedrooms" => "LIST_66",
 "DrivingDirections" => "LIST_141",
-"AddressDisplay" => "",
 "ElementarySchool" => "LIST_112",
 "GPSLatitude" => "LIST_46",
 "GPSLongitude" => "LIST_47",
@@ -57,9 +56,10 @@ $listing = array(
 "Parking" => "LIST_122",
 "PhotoCount" => "LIST_133",
 "PhotoModificationTimestamp" => "LIST_134",
+"PhotoUrls" => "",
 "Pool" => "LIST_150",
 "PostalCode" => "LIST_43",
-"PropertyStyle" => "LIST_86",
+"PropertyStyle" => "",
 "PublicRemarks" => "LIST_78",
 "SchoolDistrict" => "",
 "SquareFootage" => "LIST_48",
@@ -68,6 +68,5 @@ $listing = array(
 "TotalUnits" => "LIST_65",
 "Waterfront" => "",
 "YearBuilt" => "LIST_53",
-"ImageArray" => ""
 );
 ?>

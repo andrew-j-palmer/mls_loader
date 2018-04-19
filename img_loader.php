@@ -11,7 +11,7 @@ function imageLoader($listing) {
     foreach ($images as $image) {
         $resultlist .= $image -> getlocation();
         //need to add separator or the urls run together
-        $resultlist .= " ";
+        $resultlist .= "|";
     }
     return $resultlist;
 }

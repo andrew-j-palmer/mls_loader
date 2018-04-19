@@ -33,12 +33,6 @@ function redefineVals($key,$val,$newlisting, $record) {
                 case 'D':
                     $redefineval = "Commercial";
                 break;
-                case 'E':
-                    $redefineval = "Farm";
-                break;
-                case 'F':
-                    $redefineval = "Rental";
-                break;
             } 
         break;
           
