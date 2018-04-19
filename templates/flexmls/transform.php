@@ -15,46 +15,37 @@ function redefineVals($key,$val,$newlisting, $record) {
     //Define Country
         case 'AddressCountry':
             $redefineval = 'United States';
-            break;
-    
-    //convert boolean yes/no to 1/0
-
-        case 'AllowIDX':
-            if (strtoUpper($val) == 'Y') {
-                $redefineval = 1;
-            } else {
-                $redefineval = 0;
-            }
-            break;
+        break;
+          
     //Residential,Land,Commercial,MultiFamily,Rental
     //Farm,Other,Common Interest,Condominium                           
         case 'ListType':
             switch($val) {
                 case 'A':
                     $redefineval = "Residential";
-                    break;
+                break;
                 case 'B':
                     $redefineval = "Land";
-                    break;
+                break;
                 case 'C':
                     $redefineval = "MultiFamily";
-                    break;
+                break;
                 case 'D':
                     $redefineval = "Commercial";
-                    break;
+                break;
                 case 'E':
                     $redefineval = "Farm";
-                    break;
+                break;
                 case 'F':
                     $redefineval = "Rental";
-                    break;
+                break;
             } 
-            break;
+        break;
           
     //Enter a Common MLS Source Name for all property class imports (used for Grouping)
         case 'MLSName':
             $redefineval = $mls;
-            break; 
+        break; 
            
     //Used if Street Number and Street name are in different fields  
         case 'AddressOneLine':
@@ -67,7 +58,7 @@ function redefineVals($key,$val,$newlisting, $record) {
                 $record[$newlisting['AddressUnitNumber']]
             );
             $redefineval = implode(" ", $addresscat);
-            break;
+        break;
          
     /*Matches Listing Status to Internal Status
         case 'listingstatus':
@@ -78,13 +69,13 @@ function redefineVals($key,$val,$newlisting, $record) {
             } else {
                 $redefineval = 'Active';		     
             }
-            break;
+        break;
     */
           
     //Default just return value given		            
         default:
             $redefineval = trim($val);
-            break;                
+        break;                
     }
     return $redefineval;
 }

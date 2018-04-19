@@ -8,12 +8,14 @@
 global $mls,$rets;
 $mls = $argv[1];
 date_default_timezone_set('America/Chicago');
-$logstring = "Started $mls pull at ".date('m/d/Y h:i:s');
-$logfile = "";
+$starttime = date('m/d/Y h:i:s');
+$logstring = "Started $mls pull at ".$starttime;
+$logfile = "./mlsconfig/$mls/datarun.log";
 require("./mlsconfig/$mls/config.php");
 require("./mlsconfig/$mls/mappings.php");
 require("./mlsconfig/$mls/transform.php");
 require("./img_loader.php");
+require("./db_functions.php");
 
 
 //I'm putting mapped listings in here
@@ -39,39 +41,56 @@ if ($connect = $rets->Login()) {
 }
 
 
-//property search
-$results = $rets->Search(
-    $resource,
-    $class,
-    $listingquery,
-    [
-        'QueryType' => 'DMQL2',
-        'Count' => 1, // count and records
-        'Format' => 'COMPACT-DECODED',
-        'Limit' => 10000,
-        'StandardNames' => 0, // give system names
-    ]
-);
+//loop through the various property classes
+foreach ($class_and_query as $class => $query) {
+    $results = $rets->Search(
+        $resource,
+        $class,
+        $query,
+        [
+            'QueryType' => 'DMQL2',
+            'Count' => 1, // count and records
+            'Format' => 'COMPACT-DECODED',
+            'Limit' => 10000,
+            'StandardNames' => 0, // give system names
+        ]
+    );
 
 
-foreach ($results as $record) {
-    //init empty listing using mapping model
-    $newlisting = $listing;
+    foreach ($results as $record) {
+        //init empty listing using mapping model
+        $newlisting = $listing;
 
-    //now go through each listing field and fill if possible
-    foreach ($newlisting as $key => $item) {
-        if(!is_array($item)) {
-            // be sure to hit that "InData" column with a current time
-            echo $key."\t".$record[$item]."\t".redefineVals($key, $record[$item], $newlisting, $record)."\n";
+        //now go through each listing field and fill if possible
+        foreach ($newlisting as $key => $item) {
+            //echo $key."\t".$record[$item]."\t".redefineVals($key, $record[$item], $newlisting, $record)."\n";
             $newlisting[$key] = redefineVals($key, $record[$item], $newlisting,$record);
         }
-
+        //let's try to add photos to array at the end while we're at it
+        $newlisting['PhotoUrls'] = imageLoader($newlisting['MLSNumber']);
+        //"InData" sets a timer for deletion
+        $newlisting['InData'] = date("c");
+        array_push($mappedresults, $newlisting);
     }
-    //let's try to add photos to array at the end while we're at it
-    $newlisting['ImageArray'] = imageLoader($newlisting['MLSNumber']);
-    array_push($mappedresults, $newlisting);
-}
-//var_dump($mappedresults);
 
-echo $logstring."- finished with ".count($mappedresults)." transformed results at ".date('m/d/Y h:i:s')."\n";
+
+    //results are loaded up, now decide what we need to do with them
+    foreach ($mappedresults as $result) {  
+        //echo $result['InData'];
+        $status = checkListing($result['MLSName'], $result['MLSNumber'], $result['ModificationTimestamp']);
+        switch ($status['action']) {
+            case "update":
+                updateListing($result, $status['id']);
+                break;
+            case "insert":
+                insertListing($result);
+                break;
+            case "current":
+                InData($result['InData'], $status['id']);
+                break;
+        }
+    }
+}
+$logstring .= "- finished with ".count($mappedresults)." transformed results at ".date('m/d/Y h:i:s')."\n";
+file_put_contents($logfile, $logstring, FILE_APPEND);
 ?>
