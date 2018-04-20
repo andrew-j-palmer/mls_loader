@@ -2,7 +2,6 @@
 //listing mappings
 
 $listing = array(
-"id" => "",
 "InData" => "",
 "AddressArea" => "LIST_29",
 "AddressCity" => "LIST_39",
