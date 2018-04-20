@@ -16,37 +16,26 @@ function redefineVals($key,$val,$newlisting, $record) {
         case 'AddressCountry':
             $redefineval = 'United States';
         break;
-              //convert boolean yes/no to 1/0
 
-        case 'AllowIDX':
-        if (strtoUpper($val) == 'Y') {
-            $redefineval = 1;
-        } else {
-            $redefineval = 0;
-        }
-        break;
     //Residential,Land,Commercial,MultiFamily,Rental
     //Farm,Other,Common Interest,Condominium                           
         case 'ListType':
         switch($val) {
-            case 'A':
-                $redefineval = "Residential";
-                break;
-            case 'B':
-                $redefineval = "Land";
-                break;
-            case 'C':
-                $redefineval = "MultiFamily";
-                break;
-            case 'D':
+            case 'COM':
                 $redefineval = "Commercial";
                 break;
-            case 'E':
-                $redefineval = "Farm";
+            case 'LND':
+                $redefineval = "Land";
                 break;
-            case 'F':
+            case 'MIXED':
+                $redefineval = "Common Interest";
+                break;
+            case 'RES':
+                $redefineval = "Residential";
+                break;
+            case 'RNT':
                 $redefineval = "Rental";
-            break;
+                break;
         } 
         break;
   

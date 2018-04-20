@@ -33,19 +33,16 @@ function checkListing($mls, $mlsnum, $timestamp) {
     if (isset($update['id'])) {
         $state['id'] = $update['id'];
         if (strcmp($timestamp, $update['ModificationTimestamp']) !== 0) {
-            echo "update listing\n";
             $state['action'] = "update";
             return $state;
         } 
         else {
         //timestamps match, don't do nuthin'
-        echo "current listing\n";
         $state['action'] = "current";
         return $state;
         }
     }
     else {
-        echo "new listing\n";
         $state['action'] = "insert";
         return $state; 
     }

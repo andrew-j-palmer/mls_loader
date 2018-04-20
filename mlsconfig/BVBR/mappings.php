@@ -1,5 +1,5 @@
 <?php
-//listing mappings
+//listing mappings - optimized for BVBR
 //66 items in array currently - 67 if db id is present
 $listing = array(
 "InData" => "",
@@ -24,11 +24,11 @@ $listing = array(
 "BathsThreeQuarter" => "LIST_70",
 "BathsTotal" => "LIST_67",
 "Bedrooms" => "LIST_66",
-"DrivingDirections" => "LIST_141",
-"ElementarySchool" => "LIST_112",
+"DrivingDirections" => "LIST_82",
+"ElementarySchool" => "",
 "GPSLatitude" => "LIST_46",
 "GPSLongitude" => "LIST_47",
-"HighSchool" => "LIST_114",
+"HighSchool" => "LIST_91",
 "ListingAgentEmail" => "listing_member_email",
 "ListingAgentFirstname" => "",
 "ListingAgentFullName" => "listing_member_name",
@@ -45,7 +45,7 @@ $listing = array(
 "ListPrice" => "LIST_22",
 "ListStatus" => "LIST_15",
 "ListType" => "LIST_8",
-"LotSize" => "LIST_124",
+"LotSize" => "LIST_57",
 "MiddleSchool" => "LIST_113",
 "MLSName" => "",
 "MLSNumber" => "LIST_3",
@@ -53,13 +53,13 @@ $listing = array(
 "OpenHousedate" => "",
 "OpenHouseEnd" => "",
 "OpenHouseStart" => "",
-"Parking" => "LIST_122",
+"Parking" => "LIST_73",
 "PhotoCount" => "LIST_133",
 "PhotoModificationTimestamp" => "LIST_134",
 "PhotoUrls" => "",
 "Pool" => "LIST_150",
 "PostalCode" => "LIST_43",
-"PropertyStyle" => "",
+"PropertyStyle" => "LIST_9",
 "PublicRemarks" => "LIST_78",
 "SchoolDistrict" => "",
 "SquareFootage" => "LIST_48",

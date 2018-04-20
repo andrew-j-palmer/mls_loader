@@ -34,11 +34,10 @@ $config->setLoginUrl("$url")
 $rets = new \PHRETS\Session($config);
 
 //check connection
-if ($connect = $rets->Login()) {
-    echo "connected to $mls \n";
-} else {
-    echo "connection failed\n";
+if (!($connect = $rets->Login())) {
+    echo "Can't connect to $mls \n";
 }
+
 
 
 //loop through the various property classes

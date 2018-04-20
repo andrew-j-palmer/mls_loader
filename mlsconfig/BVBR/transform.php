@@ -17,6 +17,15 @@ function redefineVals($key,$val,$newlisting, $record) {
             $redefineval = 'United States';
         break;
           
+    //convert boolean yes/no to 1/0
+
+        case 'AllowIDX':
+        if (strtoUpper($val) == 'Y') {
+            $redefineval = 1;
+        } else {
+            $redefineval = 0;
+        }
+        break;
     //Residential,Land,Commercial,MultiFamily,Rental
     //Farm,Other,Common Interest,Condominium                           
         case 'ListType':
