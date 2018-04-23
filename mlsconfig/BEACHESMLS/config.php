@@ -8,7 +8,15 @@ $UA = ''; //shouldn't need
 $UAPass = '123456'; //shouldn't need
 $version = 'RETS/1.7.2'; //this may vary
 
-//listing search params - queries will be different every time
+/*listing search params - queries will be different every time
+* incremental - true or false depending on whether you want to grab every record every run
+* resource - check retsmd for resource name on particular MLS server
+* classes_and_queries - ditto for these. query is in DMQL2 (see below resources for help)
+* https://www.flexmls.com/developers/rets/tutorials/dmql-tutorial/
+* https://www.tutorialspoint.com/data_mining/dm_query_language.htm
+*/
+$incremental = true;
+$increment_field = "LIST_87";
 $resource = 'Property';
 $class_and_query = array(
     'A' => '(LIST_15=12LL26N0CFUH,12LL26N0CKTY,PWC_15429SGZYQIT)',

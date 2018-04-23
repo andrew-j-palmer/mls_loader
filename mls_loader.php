@@ -8,14 +8,22 @@
 global $mls,$rets;
 $mls = $argv[1];
 date_default_timezone_set('America/Chicago');
-$starttime = date('m/d/Y h:i:s');
+$starttime = date('c');
+
+/*old and busted logging
 $logstring = "Started $mls pull at ".$starttime;
 $logfile = "./mlsconfig/$mls/datarun.log";
+*/
+
 require("./mlsconfig/$mls/config.php");
 require("./mlsconfig/$mls/mappings.php");
 require("./mlsconfig/$mls/transform.php");
 require("./img_loader.php");
 require("./db_functions.php");
+
+//new hotness logging - start log here, write "success" to record later
+$logId = startRunLog($mls, $starttime);
+
 
 
 //I'm putting mapped listings in here
@@ -38,10 +46,14 @@ if (!($connect = $rets->Login())) {
     echo "Can't connect to $mls \n";
 }
 
-
-
 //loop through the various property classes
 foreach ($class_and_query as $class => $query) {
+
+    //check if incremental = true, if so add to query
+    if ($incremental) {
+        $query = makeIncremental($mls,$query,$increment_field);
+    }
+
     $results = $rets->Search(
         $resource,
         $class,
@@ -54,9 +66,10 @@ foreach ($class_and_query as $class => $query) {
             'StandardNames' => 0, // give system names
         ]
     );
-
+    echo "results: ".$results->getTotalResultsCount()."\n";
 
     foreach ($results as $record) {
+
         //init empty listing using mapping model
         $newlisting = $listing;
 
@@ -90,6 +103,12 @@ foreach ($class_and_query as $class => $query) {
         }
     }
 }
+/*more old-ass logging
 $logstring .= "- finished with ".count($mappedresults)." transformed results at ".date('m/d/Y h:i:s')."\n";
 file_put_contents($logfile, $logstring, FILE_APPEND);
+*/
+
+//finish cool new log
+finishRunLog($logId);
 ?>
+

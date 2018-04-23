@@ -1,0 +1,20 @@
+wish list, ideas to add
+
+- error checking, validation?
+(did the run finish, do we have a sane number of listings?)
+    proposed fixes:
+        -PHRETS has some of this built in already
+        -log records in *WA* db
+        -create db for MLS runs with mlsname, time, succeed(t/f)
+- do we want to do incrementals for everything?
+    fixes:
+        -again, PHRETS has some of this built in
+        -can get last run "indata" date from db and use
+        EXAMPLE IN DMQL2:
+            three attr, modtime, status, idx=y
+        (RECORDMODDATE=2018-04-23T15:00:05+),(ST=ACTV,BOMK),(IDX=Y)
+- if we have incomplete run, what do we want to do?
+    probably NOT keep data:
+        -two basic outcomes: 
+            A) finish without error
+            B) finish WITH error and let it be known

@@ -1,6 +1,6 @@
 <?php
 //listing mappings
-//for FlexMLS, will need minimal customization
+//for Matrix, will need a fair amount of customization
 $listing = array(
 "InData" => "",
 "AddressArea" => "Borough",
