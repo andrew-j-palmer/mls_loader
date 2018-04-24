@@ -18,7 +18,7 @@ function redefineVals($key,$val,$newlisting, $record) {
         break;
 
     //Residential,Land,Commercial,MultiFamily,Rental
-    //Farm,Other,Common Interest,Condominium                           
+    //Farm,Other,Common Interest,Condominium
         case 'ListType':
         switch($val) {
             case 'COM':
@@ -38,13 +38,11 @@ function redefineVals($key,$val,$newlisting, $record) {
                 break;
         } 
         break;
-  
-          
+
     //Enter a Common MLS Source Name for all property class imports (used for Grouping)
         case 'MLSName':
             $redefineval = $mls;
         break; 
-           
     //Used if Street Number and Street name are in different fields  
         case 'AddressOneLine':
             $addresscat = array(
@@ -57,23 +55,23 @@ function redefineVals($key,$val,$newlisting, $record) {
             );
             $redefineval = implode(" ", $addresscat);
         break;
-         
+
     /*Matches Listing Status to Internal Status
         case 'listingstatus':
-            if(strtoupper(trim($val)) == 'Active') { 
+            if(strtoupper(trim($val)) == 'Active') {
             $redefineval = 'Active';
             } elseif (strtoupper(trim($val)) == 'Pending') {
                 $redefineval = 'Under Contract';
             } else {
-                $redefineval = 'Active';		     
+                $redefineval = 'Active';
             }
         break;
     */
-          
-    //Default just return value given		            
+
+    //Default just return value given
         default:
             $redefineval = trim($val);
-        break;                
+        break;
     }
     return $redefineval;
 }

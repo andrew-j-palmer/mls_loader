@@ -108,7 +108,7 @@ $logstring .= "- finished with ".count($mappedresults)." transformed results at 
 file_put_contents($logfile, $logstring, FILE_APPEND);
 */
 
-//finish cool new log
+//finish cool new log - mark run as successful
 finishRunLog($logId);
 ?>
 
