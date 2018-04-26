@@ -2,7 +2,7 @@
 //listing mappings
 //for Matrix, will need a fair amount of customization
 $listing = array(
-"InData" => "",
+"inData" => 1,
 "AddressArea" => "Borough",
 "AddressCity" => "City",
 "AddressCountry" => "",

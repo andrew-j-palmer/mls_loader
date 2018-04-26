@@ -81,7 +81,7 @@ function checkListing($mls, $mlsnum, $timestamp) {
 function insertListing($listing) {
     global $db;
     $insert = $db->prepare("insert into listingsimport (
-        InData, AddressArea, AddressCity, AddressCountry,
+        inData, AddressArea, AddressCity, AddressCountry,
         AddressCounty, AddressOneLine, AddressStateOrProvince, AddressStreetDirPrefix,
         AddressStreetDirSuffix, AddressStreetName, AddressStreetNumber, AddressStreetSuffix, 
         AddressUnitNumber, AllowIDX, Basement, BathsFull, BathsHalf, BathsOneQuarter, 
@@ -95,7 +95,7 @@ function insertListing($listing) {
         Pool, PostalCode, PropertyStyle, PublicRemarks, SchoolDistrict, SquareFootage, Stories, 
         TotalRooms, TotalUnits, Waterfront, YearBuilt
         ) values (
-            :InData, :AddressArea, :AddressCity, :AddressCountry,
+            :inData, :AddressArea, :AddressCity, :AddressCountry,
             :AddressCounty, :AddressOneLine, :AddressStateOrProvince, :AddressStreetDirPrefix,
             :AddressStreetDirSuffix, :AddressStreetName, :AddressStreetNumber, :AddressStreetSuffix, 
             :AddressUnitNumber, :AllowIDX, :Basement, :BathsFull, :BathsHalf, :BathsOneQuarter, 
@@ -118,7 +118,7 @@ function updateListing($listing, $id) {
     global $db;
     //DEFINITELY 67 bound parameters
     $update = $db->prepare("update listingsimport set 
-        InData = :InData, AddressArea = :AddressArea, AddressCity = :AddressCity, AddressCountry = :AddressCountry, 
+        inData = :inData, AddressArea = :AddressArea, AddressCity = :AddressCity, AddressCountry = :AddressCountry, 
         AddressCounty = :AddressCounty, AddressOneLine = :AddressOneLine, AddressStateOrProvince = :AddressStateOrProvince, AddressStreetDirPrefix = :AddressStreetDirPrefix,
         AddressStreetDirSuffix = :AddressStreetDirSuffix, AddressStreetName = :AddressStreetName, AddressStreetNumber = :AddressStreetNumber, AddressStreetSuffix = :AddressStreetSuffix, 
         AddressUnitNumber = :AddressUnitNumber, AllowIDX = :AllowIDX, Basement = :Basement, BathsFull = :BathsFull, BathsHalf = :BathsHalf, BathsOneQuarter = :BathsOneQuarter, 
@@ -133,11 +133,29 @@ function updateListing($listing, $id) {
         TotalRooms = :TotalRooms, TotalUnits = :TotalUnits, Waterfront = :Waterfront, YearBuilt = :YearBuilt
         where id = :id");
     $update->execute($listing);
+
 }
 
-function inData($timestamp, $id) {
+function inData($mls, $mlsnum) {
     global $db;
-    $update = $db->prepare("update listingsimport set InData = ? where id = ?");
-    $update->execute(array($timestamp, $id));
+    $update = $db->prepare("update listingsimport set InData = 1 where mlsname = ? and mlsnumber = ?");
+    $update->execute(array($mls, $mlsnum));
+}
+
+function deleteListings($mls){
+    global $db;
+    //for incremental, we want to delete everything that hasn't been marked "in data"
+    //for full pulls, wipe it all first because we're going to see every listing anyway
+    //we don't have to worry about checking moddates, etc - that's what the importer's for
+    $delQuery = $db->prepare('delete from listingsimport where mlsname = ? and indata = 0');
+    $delQuery->execute(array($mls));
+    $deleted = $delQuery->rowCount(); 
+    return $deleted;
+}
+
+function resetListings($mls) {
+    global $db;
+    $resetQuery = $db->prepare('update listingsimport set indata = 0 where mlsname = ?');
+    $resetQuery->execute(array($mls));
 }
 ?>

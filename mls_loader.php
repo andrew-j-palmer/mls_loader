@@ -44,12 +44,37 @@ $rets = new \PHRETS\Session($config);
 //check connection
 if (!($connect = $rets->Login())) {
     echo "Can't connect to $mls \n";
+    //may need to add here to schedule a rerun or something
+    exit;
+}
+
+/* compile a list of mls numbers that we especially DON'T want to delete.
+* if incremental (default), we need a separate query that returns all existing MLS numbers,
+* then mark those listings in db as visible in data
+*/
+if ($incremental) {
+    $mlsNumArrayKeys = array_keys($class_and_query);
+    $mlsNumField = $listing['MLSNumber'];
+    foreach ($mlsNumArrayKeys as $class) {
+        $results = $rets->Search('Property', $class, '*', ['Select' => $mlsNumField]);
+        $totalListings = $results->getTotalResultsCount();
+        echo $totalListings." listings present in data\n";
+        foreach ($results as $r) {
+            inData($mls, $r[$mlsNumField]);
+        }
+    }
+    //delete every listing we didn't just mark, then reset
+    $deletes = deleteListings($mls);
+    echo $deletes." listings deleted\n";
+} else {
+    //if not incremental, just wipe them all out
+    deleteListings($mls);
 }
 
 //loop through the various property classes
 foreach ($class_and_query as $class => $query) {
 
-    //check if incremental = true, if so add to query
+    //if incremental = true add timestamp to query
     if ($incremental) {
         $query = makeIncremental($mls,$query,$increment_field);
     }
@@ -72,7 +97,6 @@ foreach ($class_and_query as $class => $query) {
 
         //init empty listing using mapping model
         $newlisting = $listing;
-
         //now go through each listing field and fill if possible
         foreach ($newlisting as $key => $item) {
             //echo $key."\t".$record[$item]."\t".redefineVals($key, $record[$item], $newlisting, $record)."\n";
@@ -80,15 +104,11 @@ foreach ($class_and_query as $class => $query) {
         }
         //let's try to add photos to array at the end while we're at it
         $newlisting['PhotoUrls'] = imageLoader($newlisting['MLSNumber']);
-        //"InData" sets a timer for deletion
-        $newlisting['InData'] = date("c");
-        array_push($mappedresults, $newlisting);
     }
 
 
     //results are loaded up, now decide what we need to do with them
     foreach ($mappedresults as $result) {  
-        //echo $result['InData'];
         $status = checkListing($result['MLSName'], $result['MLSNumber'], $result['ModificationTimestamp']);
         switch ($status['action']) {
             case "update":
@@ -98,11 +118,15 @@ foreach ($class_and_query as $class => $query) {
                 insertListing($result);
                 break;
             case "current":
-                InData($result['InData'], $status['id']);
+                //do nothing, should already be marked as "in data"
                 break;
         }
     }
 }
+//almost done, let's reset that inData in DB for future runs
+resetListings($mls);
+
+
 /*more old-ass logging
 $logstring .= "- finished with ".count($mappedresults)." transformed results at ".date('m/d/Y h:i:s')."\n";
 file_put_contents($logfile, $logstring, FILE_APPEND);

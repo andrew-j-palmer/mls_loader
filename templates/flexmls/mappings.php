@@ -2,7 +2,7 @@
 //listing mappings
 //for FlexMLS, will need minimal customization
 $listing = array(
-"InData" => "",
+"inData" => 1,
 "AddressArea" => "LIST_77",
 "AddressCity" => "LIST_39",
 "AddressCountry" => "",

@@ -2,7 +2,7 @@
 //listing mappings
 //66 items in array currently - 67 if db id is present
 $listing = array(
-"InData" => "",
+"inData" => 1,
 "AddressArea" => "LIST_29",
 "AddressCity" => "LIST_39",
 "AddressCountry" => "",

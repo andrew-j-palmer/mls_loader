@@ -10,12 +10,13 @@ $version = 'RETS/1.5';
 
 /*listing search params - queries will be different every time
 * incremental - true or false depending on whether you want to grab every record every run
+* NOTE - keep false for first run, so you get a full pull
 * resource - check retsmd for resource name on particular MLS server
 * classes_and_queries - ditto for these. query is in DMQL2 (see below resources for help)
 * https://www.flexmls.com/developers/rets/tutorials/dmql-tutorial/
 * https://www.tutorialspoint.com/data_mining/dm_query_language.htm
 */
-$incremental = true;
+$incremental = false;
 $increment_field = "LIST_87";
 $resource = 'Property';
 $class_and_query = array(

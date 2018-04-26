@@ -15,7 +15,7 @@ $version = 'RETS/1.5'; //this may vary
 * https://www.flexmls.com/developers/rets/tutorials/dmql-tutorial/
 * https://www.tutorialspoint.com/data_mining/dm_query_language.htm
 */
-$incremental = true;
+$incremental = false;
 $incremental_field ="";
 $resource = 'Property';
 $classes_and_Queries = array(
