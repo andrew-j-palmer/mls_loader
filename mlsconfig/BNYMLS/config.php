@@ -15,8 +15,9 @@ $version = 'RETS/1.5'; //this may vary
 * https://www.flexmls.com/developers/rets/tutorials/dmql-tutorial/
 * https://www.tutorialspoint.com/data_mining/dm_query_language.htm
 */
-$incremental = false;
+$incremental = true;
 $increment_field = "LastChangeTimestamp";
+$mlsNumQuery = "(status=A,P)";
 $resource = 'Property';
 $class_and_query = array(
     'Listing' => '(Status=A)'

@@ -13,6 +13,7 @@ $superscootermode->execute();
 //SCOOTER MODE ENGAGED
 
 function startRunLog($mls, $datetime) {
+    echo "starting log...\n";
     global $db;
     $runlog = $db->prepare('insert into prev_runs (mlsname, time) values (?, ?)');
     $id = $runlog->execute(array($mls, $datetime));
@@ -20,17 +21,18 @@ function startRunLog($mls, $datetime) {
 }
 
 function finishRunLog($id) {
+    echo "finishing log...\n";
     global $db;
     $runlog = $db->prepare('update prev_runs set success = 1 where id = ?');
     $runlog->execute(array($id));
 }
 
 function makeIncremental($mls, $query, $field) {
+    echo "running makeIncremental..\n";
     global $db;
     $lastrun = $db->prepare('select time from prev_runs where mlsname = ? and success = 1 order by time desc limit 1');
     $lastrun-> execute(array($mls));
     $result = $lastrun->fetch();
-
     //if there's no successful runs in db, we want full pull (new mls)
     //therefore, don't add incremental query
     if ($result) {
@@ -45,9 +47,7 @@ function checkListing($mls, $mlsnum, $timestamp) {
     /* NEEDS TO:
     - see if an id exists for a listing (see if we have it yet)
     - if we DON'T have id, insert record
-    - if we DO have id, compare downloaded timestamp to listing in db
-    - if timestamps don't match, we need to update
-    - if we have id and timestamps match, do nothing
+    - if we DO have id, update
 
     -IMPORTANT-
     need to RETURN ID if we have it
@@ -154,6 +154,7 @@ function deleteListings($mls){
 }
 
 function resetListings($mls) {
+    echo "resetting listings back to unseen\n";
     global $db;
     $resetQuery = $db->prepare('update listingsimport set indata = 0 where mlsname = ?');
     $resetQuery->execute(array($mls));

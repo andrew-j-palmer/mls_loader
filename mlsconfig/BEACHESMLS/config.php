@@ -15,8 +15,9 @@ $version = 'RETS/1.7.2'; //this may vary
 * https://www.flexmls.com/developers/rets/tutorials/dmql-tutorial/
 * https://www.tutorialspoint.com/data_mining/dm_query_language.htm
 */
-$incremental = false;
+$incremental = true;
 $increment_field = "LIST_87";
+$mlsNumQuery = "*";
 $resource = 'Property';
 $class_and_query = array(
     'A' => '(LIST_15=12LL26N0CFUH,12LL26N0CKTY,PWC_15429SGZYQIT)',

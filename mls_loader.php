@@ -8,7 +8,7 @@
 global $mls,$rets;
 $mls = $argv[1];
 date_default_timezone_set('America/Chicago');
-$starttime = date('c');
+$starttime = date('Y-m-d H:i:s');
 
 /*old and busted logging
 $logstring = "Started $mls pull at ".$starttime;
@@ -56,7 +56,7 @@ if ($incremental) {
     $mlsNumArrayKeys = array_keys($class_and_query);
     $mlsNumField = $listing['MLSNumber'];
     foreach ($mlsNumArrayKeys as $class) {
-        $results = $rets->Search('Property', $class, '*', ['Select' => $mlsNumField]);
+        $results = $rets->Search('Property', $class, $mlsNumQuery, ['Select' => $mlsNumField]);
         $totalListings = $results->getTotalResultsCount();
         echo $totalListings." listings present in data\n";
         foreach ($results as $r) {
@@ -64,11 +64,13 @@ if ($incremental) {
         }
     }
     //delete every listing we didn't just mark, then reset
+    echo "deleting listings not seen in current data\n";
     $deletes = deleteListings($mls);
     echo $deletes." listings deleted\n";
 } else {
     //if not incremental, just wipe them all out
     deleteListings($mls);
+    echo "deleting all listings (full pull)...\n";
 }
 
 //loop through the various property classes
@@ -76,6 +78,7 @@ foreach ($class_and_query as $class => $query) {
 
     //if incremental = true add timestamp to query
     if ($incremental) {
+        echo "Adding Incremental timestamp to existing query...\n";
         $query = makeIncremental($mls,$query,$increment_field);
     }
 
@@ -91,7 +94,7 @@ foreach ($class_and_query as $class => $query) {
             'StandardNames' => 0, // give system names
         ]
     );
-    echo "results: ".$results->getTotalResultsCount()."\n";
+    echo "Class results: ".$results->getTotalResultsCount()."\n";
 
     foreach ($results as $record) {
 
@@ -102,10 +105,11 @@ foreach ($class_and_query as $class => $query) {
             //echo $key."\t".$record[$item]."\t".redefineVals($key, $record[$item], $newlisting, $record)."\n";
             $newlisting[$key] = redefineVals($key, $record[$item], $newlisting,$record);
         }
+        $newlisting['inData'] = 1;
         //let's try to add photos to array at the end while we're at it
         $newlisting['PhotoUrls'] = imageLoader($newlisting['MLSNumber']);
+        array_push($mappedresults, $newlisting);
     }
-
 
     //results are loaded up, now decide what we need to do with them
     foreach ($mappedresults as $result) {  
