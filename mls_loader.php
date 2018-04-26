@@ -80,6 +80,7 @@ foreach ($class_and_query as $class => $query) {
     if ($incremental) {
         echo "Adding Incremental timestamp to existing query...\n";
         $query = makeIncremental($mls,$query,$increment_field);
+        echo "Incremental Query:".$query."\n";
     }
 
     $results = $rets->Search(
@@ -107,7 +108,7 @@ foreach ($class_and_query as $class => $query) {
         }
         $newlisting['inData'] = 1;
         //let's try to add photos to array at the end while we're at it
-        $newlisting['PhotoUrls'] = imageLoader($newlisting['MLSNumber']);
+        $newlisting['PhotoUrls'] = imageLoader($newlisting['MLSNumber'], $mediaFormat);
         array_push($mappedresults, $newlisting);
     }
 

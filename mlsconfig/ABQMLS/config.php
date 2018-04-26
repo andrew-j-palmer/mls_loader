@@ -11,6 +11,7 @@ $version = 'RETS/1.5';
 /*listing search params - queries will be different every time
 * incremental - true or false depending on whether you want to grab every record every run
 * NOTE - keep false for first run, so you get a full pull
+* mediaFormat = default is url (we download later), if this doesn't work change to binary
 * resource - check retsmd for resource name on particular MLS server
 * classes_and_queries - ditto for these. query is in DMQL2 (see below resources for help)
 * https://www.flexmls.com/developers/rets/tutorials/dmql-tutorial/
@@ -19,6 +20,7 @@ $version = 'RETS/1.5';
 $incremental = true;
 $increment_field = "LIST_87";
 $mlsNumQuery = "*";
+$mediaFormat = "url";
 $resource = 'Property';
 $class_and_query = array(
     'A' => '(LIST_15=1537DVHF564V,PWC_1DDI44AXS447,PWC_1DD44AXS9NC,PWC_1DDI44AXSFXJ)',

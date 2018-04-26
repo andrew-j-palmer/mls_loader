@@ -36,7 +36,8 @@ function makeIncremental($mls, $query, $field) {
     //if there's no successful runs in db, we want full pull (new mls)
     //therefore, don't add incremental query
     if ($result) {
-        $incremental = '('.$field.'='.$result['time'].'+),'.$query;
+        $timestamp = preg_replace("/ /", "T", $result['time']);
+        $incremental = '('.$field.'='.$timestamp.'+),'.$query;
         return $incremental;
     } else {
         return $query;
