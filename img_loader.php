@@ -6,9 +6,10 @@ function imageLoader($listing, $mediaFormat) {
     echo "**IMAGELOADER** ->  ";
     //was going to make an array of images inside of listing array. that's stupid, just use a string
     global $rets, $resourcetype, $mediatype, $mls;
+    $resultlist = "";
+
     if ($mediaFormat === "url") {
         echo "getting photo URLS\n";
-        $resultlist = "";
         $images = $rets->GetObject($resourcetype, $mediatype, $listing, '*', 1);
         foreach ($images as $image) {
             $resultlist .= $image -> getlocation();
@@ -17,7 +18,7 @@ function imageLoader($listing, $mediaFormat) {
         }
         return $resultlist;
     } else {
-        echo "Binary data files\n";
+        echo "Binary data files - ";
         //if the above doesn't work, we'll have to change $mediaFormat in config to "binary"
         //and save binary image data locally
         $filepath = './Photos/'.$mls;
@@ -29,16 +30,19 @@ function imageLoader($listing, $mediaFormat) {
         }
         //time for image stuff here, this is for ULS, need to tweak
         $images = $rets->GetObject($resourcetype, $mediatype, $listing, '*');
-        var_dump($images); exit;
-        foreach ($images as $image) {
-            if ($image['success']) {
-                $filefullpath = $filepath.'/'.$image['Content-ID'].'-'.$image['Object-ID'].'.jpg';
-                file_put_contents($filefullpath, $image['Data']);
-            }
 
+        foreach ($images as $image) {
+			$mlsnum = $image->getContentId();
+			$mlsnum .= $image->getObjectId();
+			$filenameHash = hash('md5', $mlsnum);
+			$data = $image->getContent();
+            $filefullpath = $filepath.'/'.$filenameHash.'.jpg';
+            file_put_contents($filefullpath, $data);
+			$resultlist .=$filefullpath;
+			$resultlist .= "|";
         }
-        return $resultlist;
     }
+    return $resultlist;
 }
 
 ?>
