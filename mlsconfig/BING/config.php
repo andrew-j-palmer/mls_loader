@@ -20,15 +20,15 @@ $version = 'RETS/1.5'; //this may vary
 */
 $incremental = true;
 $increment_field ="ModificationTimestamp";
-$mlsNumQuery = "*";
+$MLSNumQuery = "*";
 $mediaFormat = "binary";
 $resource = 'Property';
 $class_and_query = array(
     'Commercial' => '(ListingStatus=A,P)',
     'LotsAndLand' => '(ListingStatus=A,P)',
     'MultiFamily' => '(ListingStatus=A,P)',
-    'Rental' => '(ListingStatus=,A,P)',
-    'ResidentialProperty' => '(ListingStatus=,A,P)'
+    'Rental' => '(ListingStatus=A,P)',
+    'ResidentialProperty' => '(ListingStatus=A,P)'
 );
 //media search params - not likely to change too much
 $resourcetype = "Property";

@@ -18,11 +18,10 @@ $version = 'RETS/1.5'; //this may vary
 * https://www.flexmls.com/developers/rets/tutorials/dmql-tutorial/
 * https://www.tutorialspoint.com/data_mining/dm_query_language.htm
 */
-$incremental = false;
-$incremental_field ="ModificationTimestamp";
-$MLSNumQuery = "*";
-$mediaFormat = "binary";
-$resource = 'Property';
+
+$mediaFormat = "binary"; // set to "url" or "binary" - binary means we have to save photos
+$resource = 'Property'; // resource is almost always 'property'
+// class_and_query - keys are systemname classes, query is what you want(use retsmd to find this)
 $class_and_query = array(
     'COM' => '(ListingStatus=$,A,P)',
     'LND' => '(ListingStatus=$,A,P)',
@@ -30,7 +29,7 @@ $class_and_query = array(
     'RNT' => '(ListingStatus=$,A,P)',
     'RES' => '(ListingStatus=$,A,P)'
 );
-//media search params - not likely to change too much
+//media search params - not likely to change as much from MLS to MLS
 $resourcetype = "Property";
 $mediatype = "HQPhoto";
 

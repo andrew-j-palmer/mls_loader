@@ -1,5 +1,6 @@
 {
     "require": {
-        "troydavisson/phrets": "^2.6"
+        "troydavisson/phrets": "^2.6",
+        "nategood/commando": "^0.2.9"
     }
 }

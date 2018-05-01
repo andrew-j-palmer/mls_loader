@@ -49,82 +49,99 @@ if (!($connect = $rets->Login())) {
 }
 
 /* compile a list of mls numbers that we especially DON'T want to delete.
-* if incremental (default), we need a separate query that returns all existing MLS numbers,
+* we need a separate query that returns all existing MLS numbers,
 * then mark those listings in db as visible in data
 */
-if ($incremental) {
-    $mlsNumArrayKeys = array_keys($class_and_query);
-    $mlsNumField = $listing['MLSNumber'];
-    foreach ($mlsNumArrayKeys as $class) {
-        $results = $rets->Search('Property', $class, $mlsNumQuery, ['Select' => $mlsNumField]);
+
+$mlsNumField = $listing['MLSNumber'];
+foreach ($class_and_query as $class => $query) {
+    $offsetAmt = 1;
+    $mlsNumFinished = false;
+    while ($mlsNumFinished == false) {
+        $results = $rets->Search('Property', $class, $query,
+        [
+            'Select' => $mlsNumField,
+            'Offset' => $offsetAmt    
+        ]);
         $totalListings = $results->getTotalResultsCount();
         echo $totalListings." listings present in data\n";
         foreach ($results as $r) {
             inData($mls, $r[$mlsNumField]);
         }
+        if ($results->isMaxRowsReached() == 1) {
+            echo "Bounced off of limit, applying offset and trying for more records\n";
+            $offsetAmt+= $offset;
+        } else {
+            $mlsNumFinished = true;
+        }
     }
-    //delete every listing we didn't just mark, then reset
-    echo "deleting listings not seen in current data\n";
-    $deletes = deleteListings($mls);
-    echo $deletes." listings deleted\n";
-} else {
-    //if not incremental, just wipe them all out
-    deleteListings($mls);
-    echo "deleting all listings (full pull)...\n";
 }
+
+//delete every listing we didn't just mark, then reset
+echo "deleting listings not seen in current data\n";
+$deletes = deleteListings($mls);
+echo $deletes." listings deleted\n";
+
 
 //loop through the various property classes
 foreach ($class_and_query as $class => $query) {
+    $offsetAmt = 1;
+    $finished = false;
 
-    //if incremental = true add timestamp to query
-    if ($incremental) {
-        echo "Adding Incremental timestamp to existing query...\n";
-        $query = makeIncremental($mls,$query,$increment_field);
-        echo "Incremental Query:".$query."\n";
-    }
+    echo "Adding Timestamp to existing query...\n";
+    $query = makeIncremental($mls,$query,$listing['ModificationTimestamp']);
+    echo "Query:".$query."\n";
 
-    $results = $rets->Search(
-        $resource,
-        $class,
-        $query,
-        [
-            'QueryType' => 'DMQL2',
-            'Count' => 1, // count and records
-            'Format' => 'COMPACT-DECODED',
-            'Limit' => 10000,
-            'StandardNames' => 0, // give system names
-        ]
-    );
-    echo "Class results: ".$results->getTotalResultsCount()."\n";
-
-    foreach ($results as $record) {
-
-        //init empty listing using mapping model
-        $newlisting = $listing;
-        //now go through each listing field and fill if possible
-        foreach ($newlisting as $key => $item) {
-            //echo $key."\t".$record[$item]."\t".redefineVals($key, $record[$item], $newlisting, $record)."\n";
-            $newlisting[$key] = redefineVals($key, $record[$item], $newlisting,$record);
+    while ($finished == false) {
+        $results = $rets->Search(
+            $resource,
+            $class,
+            $query,
+            [
+                'QueryType' => 'DMQL2',
+                'Count' => 1, // count and records
+                'Format' => 'COMPACT-DECODED',
+                'Limit' => 999999,
+                'StandardNames' => 0, // give system names
+                'Offset' => $offsetAmt
+            ]
+        );
+        echo "Class results: ".$results->getTotalResultsCount()."\n";
+        foreach ($results as $record) {
+            //init empty listing using mapping model
+            $newlisting = $listing;
+            //now go through each listing field and fill if possible
+            foreach ($newlisting as $key => $item) {
+                //echo $key."\t".$record[$item]."\t".redefineVals($key, $record[$item], $newlisting, $record)."\n";
+                $newlisting[$key] = redefineVals($key, $record[$item], $newlisting,$record);
+            }
+            $newlisting['inData'] = 1;
+            //let's try to add photos to array at the end while we're at it
+            $newlisting['PhotoUrls'] = imageLoader($record, $mediaFormat);
+            array_push($mappedresults, $newlisting);
         }
-        $newlisting['inData'] = 1;
-        //let's try to add photos to array at the end while we're at it
-        $newlisting['PhotoUrls'] = imageLoader($newlisting['MLSNumber'], $mediaFormat);
-        array_push($mappedresults, $newlisting);
-    }
 
-    //results are loaded up, now decide what we need to do with them
-    foreach ($mappedresults as $result) {  
-        $status = checkListing($result['MLSName'], $result['MLSNumber'], $result['ModificationTimestamp']);
-        switch ($status['action']) {
-            case "update":
-                updateListing($result, $status['id']);
-                break;
-            case "insert":
-                insertListing($result);
-                break;
-            case "current":
-                //do nothing, should already be marked as "in data"
-                break;
+        //results are loaded up, now decide what we need to do with them
+        foreach ($mappedresults as $result) {  
+            $status = checkListing($result['MLSName'], $result['MLSNumber'], $result['ModificationTimestamp']);
+            switch ($status['action']) {
+                case "update":
+                    updateListing($result, $status['id']);
+                    break;
+                case "insert":
+                    insertListing($result);
+                    break;
+                case "current":
+                    //do nothing, should already be marked as "in data"
+                    break;
+            }
+        }
+
+        if ($results->isMaxRowsReached() == 1) {
+            echo "Bounced off the limiter, applying offset and trying for more records\n";
+            $offsetAmt+= $offset;
+        } else {
+            $finished = true;
         }
     }
 }

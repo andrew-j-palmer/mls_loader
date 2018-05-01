@@ -18,7 +18,7 @@ $version = 'RETS/1.7.2';
 */
 $incremental = true;
 $increment_field = "LIST_87";
-$mlsNumQuery = "*";
+$MLSNumQuery = "*";
 $mediaFormat = "url";
 $resource = 'Property';
 $class_and_query = array(

@@ -18,7 +18,7 @@ $version = 'RETS/1.5'; //this may vary
 */
 $incremental = true;
 $increment_field = "LastChangeTimestamp";
-$mlsNumQuery = "(status=A,P)";
+$MLSNumQuery = "(status=A,P)";
 $mediaFormat = "url";
 $resource = 'Property';
 $class_and_query = array(

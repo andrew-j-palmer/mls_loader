@@ -7,20 +7,13 @@ wish list, ideas to add
     proposed fixes:
         -PHRETS has some of this built in already
         -log records in *WA* db
-        -create db for MLS runs with mlsname, time, succeed(t/f)*DONE*
-- do we want to do incrementals for everything?*DONE*
-    fixes:
-        -again, PHRETS has some of this built in*DONE*
-        -can get last run "indata" date from db and use*DONE*
-        EXAMPLE IN DMQL2:
-            three attr, modtime, status, idx=y
-        (RECORDMODDATE=2018-04-23T15:00:05+),(ST=ACTV,BOMK),(IDX=Y)
-        *IMPLEMENTED*: incremental can be set (T/F) in config, if T then add timestamp compare to
-        beginning of each query when running. it works
-- if we have incomplete run, what do we want to do?*DONE*(sorta)
-    probably NOT keep data:
-        -two basic outcomes:
-            A) finish without error
-            B) finish WITH error and let it be known
-            *IMPLEMENTED*: provisity.prev_runs has record of every run, column 'success' is set
-            to false until run finishes without error
+        -have prev_runs db for MLS runs with mlsname, time, succeed(t/f)*DONE*
+- do we want to do incrementals for everything?
+    How incremental needs to work:
+        - check prev_runs for evidence of successful run
+        - if success = true, use that time for incremental
+        - otherwise, full run until success
+- if we have incomplete run, do NOT keep data:
+        - again, prev_runs shows successful
+        - if incremental time is based on last successful run,
+            we should always get every record even if fail
