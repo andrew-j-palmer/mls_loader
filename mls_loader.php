@@ -68,7 +68,7 @@ foreach ($class_and_query as $class => $query) {
         ]);
         $remainingRecords = $results->getTotalResultsCount()."\n";
         $remainingRecords -= $offsetAmt;
-        echo "Records: ".$remainingRecords;
+        echo "Records: ".$remainingRecords."\n";
  
         foreach ($results as $r) {
             inData($mls, $r[$mlsNumField]);
@@ -113,7 +113,7 @@ foreach ($class_and_query as $class => $query) {
         );
         $remainingRecords = $results->getTotalResultsCount()."\n";
         $remainingRecords -= $offsetAmt;
-        echo "Records: ".$remainingRecords;
+        echo "Records: ".$remainingRecords."\n";
         foreach ($results as $record) {
             //init empty listing using mapping model
             $newlisting = $listing;
