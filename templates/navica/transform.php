@@ -29,24 +29,18 @@ function redefineVals($key,$val,$newlisting, $record) {
     //Farm,Other,Common Interest,Condominium                           
         case 'ListType':
         switch($val) {
-            case 'A':
+            case 'RES':
                 $redefineval = "Residential";
                 break;
-            case 'B':
+            case 'LAND':
                 $redefineval = "Land";
                 break;
-            case 'C':
+            case 'MFAM':
                 $redefineval = "MultiFamily";
                 break;
-            case 'D':
+            case 'COMM':
                 $redefineval = "Commercial";
                 break;
-            case 'E':
-                $redefineval = "Farm";
-                break;
-            case 'F':
-                $redefineval = "Rental";
-            break;
         } 
         break;
   
@@ -57,17 +51,16 @@ function redefineVals($key,$val,$newlisting, $record) {
         break; 
            
     //Used if Street Number and Street name are in different fields  
-        case 'AddressOneLine':
-            $addresscat = array(
-                $record[$newlisting['AddressStreetNumber']],
-                $record[$newlisting['AddressStreetDirPrefix']],
-                $record[$newlisting['AddressStreetName']],
-                $record[$newlisting['AddressStreetSuffix']],
-                $record[$newlisting['AddressStreetDirSuffix']],
-                $record[$newlisting['AddressUnitNumber']]
-            );
-            $redefineval = implode(" ", $addresscat);
-        break;
+    case 'AddressOneLine':
+    $addresscat = array(
+        $record[$newlisting['AddressStreetNumber']],
+        $record[$newlisting['AddressStreetDirPrefix']],
+        $record[$newlisting['AddressStreetName']],
+        $record[$newlisting['AddressStreetSuffix']],
+        $record[$newlisting['AddressStreetDirSuffix']],
+    );
+    $redefineval = implode(" ", $addresscat);
+break;
          
     /*Matches Listing Status to Internal Status
         case 'listingstatus':
