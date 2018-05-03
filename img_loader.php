@@ -5,7 +5,9 @@
 function imageLoader($listing, $mediaFormat) {
     //echo "**IMAGELOADER** ->  ";
     //was going to make an array of images inside of listing array. that's stupid, just use a string
-    global $rets, $resourcetype, $mediatype, $mls, $useMediaClass, $mediaclass, $mediaIdentifier;
+    global $rets, $resourcetype, $mediatype, $mls, $useMediaClass, $mediaClass,
+     $mediaIdentifier, $PhotoOrderField, $PhotoUrlField;
+
     $resultlist = "";
 
     if (!$useMediaClass) {
@@ -48,11 +50,11 @@ function imageLoader($listing, $mediaFormat) {
         return $resultlist;
     }
     else {
-        echo "regular search in media class\n";
+        echo "\nregular search in media class ";
         // use this portion if separate query to class "media" is necessary
-        $mediaquery = $mediaIdentifier.'='.$listing[$mediaIdentifier];
-
-        $images = $rets->Search($resourcetype, $mediaclass, $mediaquery,
+        $mediaquery = '('.$mediaIdentifier.'=|'.$listing[$mediaIdentifier].')';
+        echo $mediaquery."\n";
+        $images = $rets->Search($resourcetype, $mediaClass, $mediaquery,
         [
             'QueryType' => 'DMQL2',
             'Count' => 1, // count and records
@@ -60,11 +62,13 @@ function imageLoader($listing, $mediaFormat) {
             'Limit' => 999999,
             'StandardNames' => 0, // give system names
         ]);
-
+        $sortArray = array();
         foreach ($images as $image) {
-            //do nothing as of now
+            $sortArray += [$image[$PhotoOrderField] => $image[$PhotoUrlField]];
         }
-        echo $resultlist;
+        ksort($sortArray);
+        $resultlist = implode("|", $sortArray);
+        return $resultlist;
     }
 }
 ?>

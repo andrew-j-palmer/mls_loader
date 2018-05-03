@@ -37,6 +37,8 @@ $config = new \PHRETS\Configuration;
 $config->setLoginUrl("$url")
         ->setUsername("$user")
         ->setPassword("$pass")
+        ->setUserAgent("$UA")
+        ->setUserAgentPassword("$UAPass")
         ->setRetsVersion("$version");
 
 $rets = new \PHRETS\Session($config);
@@ -54,6 +56,7 @@ if (!($connect = $rets->Login())) {
 */
 
 $mlsNumField = $listing['MLSNumber'];
+
 foreach ($class_and_query as $class => $query) {
     $offsetAmt = 1;
     $mlsNumFinished = false;
