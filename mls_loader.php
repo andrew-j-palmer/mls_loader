@@ -42,7 +42,7 @@ $config->setLoginUrl("$url")
         ->setRetsVersion("$version");
 
 $rets = new \PHRETS\Session($config);
-
+echo "starting at".date("c")."\n";
 //check connection
 if (!($connect = $rets->Login())) {
     echo "Can't connect to $mls \n";
@@ -81,7 +81,7 @@ foreach ($class_and_query as $class => $query) {
         }
     }
 }
-
+echo "It is now ".date("c")."\n";
 //delete every listing we didn't just mark, then reset
 echo "deleting listings not seen in current data\n";
 $deletes = deleteListings($mls);
@@ -90,6 +90,7 @@ echo $deletes." listings deleted\n";
 
 //loop through the various property classes
 foreach ($class_and_query as $class => $query) {
+    echo "New propert class at ".date("c")."\n";
     $offsetAmt = 1;
     $finished = false;
 
