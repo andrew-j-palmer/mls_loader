@@ -109,7 +109,9 @@ foreach ($class_and_query as $class => $query) {
                 'Offset' => $offsetAmt
             ]
         );
-        echo "Class results: ".$results->getTotalResultsCount()."\n";
+        $remainingRecords = $results->getTotalResultsCount()."\n";
+        $remainingRecords -= $offsetAmt;
+        echo "Records: ".$remainingRecords;
         foreach ($results as $record) {
             //init empty listing using mapping model
             $newlisting = $listing;

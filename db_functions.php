@@ -54,7 +54,7 @@ function checkListing($mls, $mlsnum, $timestamp) {
     need to RETURN ID if we have it
     */
     global $db;
-    $query = $db->prepare("select * from listingsimport where MLSNumber = ? and MLSName = ? limit 1");
+    $query = $db->prepare("select ModificationTimestamp, id from listingsimport where MLSNumber = ? and MLSName = ? limit 1");
     $query-> execute(array($mlsnum, $mls));
     $return = $query->fetchAll();
     $update = array_pop($return);

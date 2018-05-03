@@ -50,10 +50,9 @@ function imageLoader($listing, $mediaFormat) {
         return $resultlist;
     }
     else {
-        echo "\nregular search in media class ";
         // use this portion if separate query to class "media" is necessary
         $mediaquery = '('.$mediaIdentifier.'=|'.$listing[$mediaIdentifier].')';
-        echo $mediaquery."\n";
+        //echo $mediaquery."\n";
         $images = $rets->Search($resourcetype, $mediaClass, $mediaquery,
         [
             'QueryType' => 'DMQL2',
