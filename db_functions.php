@@ -137,10 +137,15 @@ function updateListing($listing, $id) {
 
 }
 
-function inData($mls, $mlsnum) {
+function inData($mls, $mlsnums) {
     global $db;
+    $oldNums = $db->prepare("select mlsnumber from listingsimport where mlsname = ?");
+    $oldNums->execute(array($mls));
+    $comparenums = $oldNums->fetchAll();
+    array_pop($comparenums);
+
     $update = $db->prepare("update listingsimport set InData = 1 where mlsname = ? and mlsnumber = ?");
-    $update->execute(array($mls, $mlsnum));
+    $update->execute(array($mls, $deletes));
 }
 
 function deleteListings($mls){

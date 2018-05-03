@@ -42,7 +42,7 @@ $config->setLoginUrl("$url")
         ->setRetsVersion("$version");
 
 $rets = new \PHRETS\Session($config);
-echo "starting at".date("c")."\n";
+echo "starting at ".date("c")."\n";
 //check connection
 if (!($connect = $rets->Login())) {
     echo "Can't connect to $mls \n";
@@ -56,7 +56,7 @@ if (!($connect = $rets->Login())) {
 */
 
 $mlsNumField = $listing['MLSNumber'];
-
+$mlsNums = array();
 foreach ($class_and_query as $class => $query) {
     $offsetAmt = 1;
     $mlsNumFinished = false;
@@ -69,10 +69,10 @@ foreach ($class_and_query as $class => $query) {
         $remainingRecords = $results->getTotalResultsCount()."\n";
         $remainingRecords -= $offsetAmt;
         echo "Records: ".$remainingRecords."\n";
- 
-        foreach ($results as $r) {
-            inData($mls, $r[$mlsNumField]);
+        foreach ($results as $result) {
+            array_push($mlsNums, $result[$mlsNumField]);
         }
+
         if ($results->isMaxRowsReached() == 1) {
             echo "Bounced off of limit, applying offset and trying for more records\n";
             $offsetAmt+= $offset;
@@ -81,6 +81,8 @@ foreach ($class_and_query as $class => $query) {
         }
     }
 }
+inData($mls, $mlsNums);
+
 echo "It is now ".date("c")."\n";
 //delete every listing we didn't just mark, then reset
 echo "deleting listings not seen in current data\n";
@@ -90,7 +92,7 @@ echo $deletes." listings deleted\n";
 
 //loop through the various property classes
 foreach ($class_and_query as $class => $query) {
-    echo "New propert class at ".date("c")."\n";
+    echo "New property class at ".date("c")."\n";
     $offsetAmt = 1;
     $finished = false;
 
@@ -123,10 +125,12 @@ foreach ($class_and_query as $class => $query) {
                 //echo $key."\t".$record[$item]."\t".redefineVals($key, $record[$item], $newlisting, $record)."\n";
                 $newlisting[$key] = redefineVals($key, $record[$item], $newlisting,$record);
             }
-            $newlisting['inData'] = 1;
+            //Do we still need this? I'm mapping indata = 1 when creating the listing object
+            //$newlisting['inData'] = 1;
             //let's try to add photos to array at the end while we're at it
             $newlisting['PhotoUrls'] = imageLoader($record, $mediaFormat);
             array_push($mappedresults, $newlisting);
+            var_dump($newlisting);
         }
 
         //results are loaded up, now decide what we need to do with them

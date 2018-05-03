@@ -17,7 +17,7 @@ $version = 'RETS/1.5'; //this may vary
 * https://www.tutorialspoint.com/data_mining/dm_query_language.htm
 */
 
-$offset = 250;
+$offset = 500;
 $mediaFormat = "url"; // set to "url" or "binary" - binary means we have to save photos
 $resource = 'Property';// resource is almost always 'property'
 // class_and_query - keys are systemname classes, query is what you want(use retsmd to find this)
