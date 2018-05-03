@@ -66,8 +66,10 @@ foreach ($class_and_query as $class => $query) {
             'Select' => $mlsNumField,
             'Offset' => $offsetAmt    
         ]);
-        $totalListings = $results->getTotalResultsCount();
-        echo $totalListings." listings present in data\n";
+        $remainingRecords = $results->getTotalResultsCount()."\n";
+        $remainingRecords -= $offsetAmt;
+        echo "Records: ".$remainingRecords;
+ 
         foreach ($results as $r) {
             inData($mls, $r[$mlsNumField]);
         }
