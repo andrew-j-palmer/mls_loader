@@ -1,17 +1,10 @@
 <?php
 
 function redefineVals($key,$val,$newlisting, $record) {
-    global $brokeridlength,$valueRedefine,$brokeridlengthoverridearray,$mls;
+    global $valueRedefine,$brokeridlengthoverridearray,$mls;
     $redefineval = '';
     switch ($key) {
-           
-    /*Trim OfficeKeys
-        case 'officekey':
-            $brokeridlengthovr = brokeridlengthoverride($brokeridlengthoverridearray, $val);
-            $brokeridlengthuse = ($brokeridlengthovr > 0) ? $brokeridlengthovr : $brokeridlength;
-            $redefineval = substr($val,0,$brokeridlengthuse);
-        break;
-    */     
+
     //Define Country
         case 'AddressCountry':
             $redefineval = 'United States';
@@ -20,19 +13,15 @@ function redefineVals($key,$val,$newlisting, $record) {
     //Residential,Land,Commercial,MultiFamily,Rental
     //Farm,Other,Common Interest,Condominium
         case 'ListType':
-        switch($val) {
-            case 'MLS':
-                switch($listing['PropertyClassID']){
-                    case "3":
-                        $redefineval = "Lots And Land";
-                    break;
-                    case "4":
-                        $redefineval = "MultiFamily";
-                    break;
-                    case "5":
-                        $redefineval = "Commercial";
-                    break;   
-                }
+
+            case "3":
+                $redefineval = "Lots And Land";
+            break;
+            case "4":
+                $redefineval = "MultiFamily";
+            break;
+            case "5":
+                $redefineval = "Commercial";
             break;
             case 'RES':
                 $redefineval = "Residential";
@@ -41,9 +30,8 @@ function redefineVals($key,$val,$newlisting, $record) {
                 $redefineval = "Rental";
             break;
             case 'CND':
-                $redefineval = "Rental";
-            break;
-        } 
+                $redefineval = "Condominium";
+            break; 
         break;
 
     //Enter a Common MLS Source Name for all property class imports (used for Grouping)

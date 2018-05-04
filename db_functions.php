@@ -143,16 +143,14 @@ function inData($mls, $mlsnums) {
     $oldNums->execute(array($mls));
     $comparenums = $oldNums->fetchAll();
     $dbnums = array_column($comparenums, 'mlsnumber');
-    $count = 0;
-    foreach ($mlsnums as $num) {
-        if (in_array($num, $dbnums)) {
-            $count++;
-            $update = $db->prepare("update listingsimport set InData = 1 where mlsname = ? and mlsnumber = ?");
-            $update->execute(array($mls, $num));
-        }
+    $keepers = array_diff($dbnums, $mlsnums);
+    foreach ($keepers as $keeper) {
+        $update = $db->prepare("update listingsimport set InData = 1 where mlsname = ? and mlsnumber = ?");
+        $update->execute(array($mls, $keeper));
     }
-    echo $count." matched records - we'll keep these\n";
-
+    echo count($keepers)." records marked for delete\n";
+    
+    
 }
 
 function deleteListings($mls){

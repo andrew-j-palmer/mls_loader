@@ -1,7 +1,7 @@
 <?php
 
 //login creds
-$url = 'URL:http://cwbr.rets.fnismls.com/rets/fnisrets.aspx/CWBR/login?rets-version=rets/1.5';
+$url = 'http://cwbr.rets.fnismls.com/rets/fnisrets.aspx/CWBR/login?rets-version=rets/1.5';
 $user = 'exitrealtyprime21';
 $pass = 'cwmls54455';
 $UA = 'RETS-Connector/1.2'; 

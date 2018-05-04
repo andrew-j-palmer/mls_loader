@@ -70,4 +70,23 @@ $listing = array(
 "Waterfront" => "L_Keyword10",
 "YearBuilt" => "LM_int4_40",
 );
+
+$agent = array(
+    "Active" => '',
+    "AgentID" => '',
+    "AgentEmail" => '',
+    "AgentPhone1" => '',
+    "AgentPhone2" => '',
+    "AgentUrl" => '',
+    "OfficeAddress" => '',
+    "OfficeEmail" => '',
+    "OfficeID" => '',
+    "OfficeName" => '',
+    "OfficePhone" => '',
+    "OfficeState" => '',
+    "OfficeStreetname" => '',
+    "OfficeStreetNumber" => '',
+    "OfficeUnitNumber" => '',
+    "OfficeZip" => ''
+);
 ?>
