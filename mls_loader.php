@@ -130,7 +130,7 @@ foreach ($class_and_query as $class => $query) {
             //let's try to add photos to array at the end while we're at it
             $newlisting['PhotoUrls'] = imageLoader($record, $mediaFormat);
             array_push($mappedresults, $newlisting);
-            var_dump($newlisting);
+            //var_dump($newlisting);
         }
 
         //results are loaded up, now decide what we need to do with them
