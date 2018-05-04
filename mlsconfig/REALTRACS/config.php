@@ -23,9 +23,9 @@ $resource = 'Property';// resource is almost always 'property'
 // class_and_query - keys are systemname classes, query is what you want(use retsmd to find this)
 $class_and_query = array(
     'CND' => '(StandardStatus=301001,301002)',
-    'MLS' => '(StandardStatus=301001,301002),(PropertyClassID=3,4,5)',
+    'MLS' => '(StandardStatus=301001,301002),(PropertyClassID=3,4,5)'/*,
     'RES' => '(StandardStatus=301001,301002)',
-    'RNT' => '(StandardStatus=301001,301002)'
+    'RNT' => '(StandardStatus=301001,301002)'*/
 );
 //media search params - not likely to change too much from MLS to MLS
 $resourcetype = "Media";

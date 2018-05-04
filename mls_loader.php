@@ -45,7 +45,7 @@ $rets = new \PHRETS\Session($config);
 echo "starting at ".date("c")."\n";
 //check connection
 if (!($connect = $rets->Login())) {
-    echo "Can't connect to $mls \n";
+    echo "\e[0;31mCan't connect to $mls \e[0m\n";
     //may need to add here to schedule a rerun or something
     exit;
 }
@@ -68,13 +68,13 @@ foreach ($class_and_query as $class => $query) {
         ]);
         $remainingRecords = $results->getTotalResultsCount()."\n";
         $remainingRecords -= $offsetAmt;
-        echo "Records: ".$remainingRecords."\n";
+        echo "MLS Numbers left to grab: ".$remainingRecords."\n";
         foreach ($results as $result) {
             array_push($mlsNums, $result[$mlsNumField]);
         }
 
         if ($results->isMaxRowsReached() == 1) {
-            echo "Bounced off of limit, applying offset and trying for more records\n";
+            echo "\e[0;33mBounced off of limit, applying offset and trying for more records\e[0m\n";
             $offsetAmt+= $offset;
         } else {
             $mlsNumFinished = true;
@@ -83,16 +83,16 @@ foreach ($class_and_query as $class => $query) {
 }
 inData($mls, $mlsNums);
 
-echo "It is now ".date("c")."\n";
+echo "Finished with MLS numbers at ".date("c")."\n";
 //delete every listing we didn't just mark, then reset
-echo "deleting listings not seen in current data\n";
+echo "\e[0;31mdeleting listings not seen in current data\e[0m\n";
 $deletes = deleteListings($mls);
 echo $deletes." listings deleted\n";
 
 
 //loop through the various property classes
 foreach ($class_and_query as $class => $query) {
-    echo "New property class at ".date("c")."\n";
+    echo "\e[32mNew property class at ".date("c")."\e[0m\n";
     $offsetAmt = 1;
     $finished = false;
 
@@ -116,7 +116,7 @@ foreach ($class_and_query as $class => $query) {
         );
         $remainingRecords = $results->getTotalResultsCount()."\n";
         $remainingRecords -= $offsetAmt;
-        echo "Records: ".$remainingRecords."\n";
+        echo "Records left to grab: ".$remainingRecords."\n";
         foreach ($results as $record) {
             //init empty listing using mapping model
             $newlisting = $listing;
@@ -133,6 +133,12 @@ foreach ($class_and_query as $class => $query) {
             //var_dump($newlisting);
         }
 
+        if ($results->isMaxRowsReached() == 1) {
+            echo "\e[0;36mBounced off the limiter, applying offset and trying for more records\e[0m\n";
+            $offsetAmt+= $offset;
+        } else {
+            $finished = true;
+        }
         //results are loaded up, now decide what we need to do with them
         foreach ($mappedresults as $result) {  
             $status = checkListing($result['MLSName'], $result['MLSNumber'], $result['ModificationTimestamp']);
@@ -147,13 +153,6 @@ foreach ($class_and_query as $class => $query) {
                     //do nothing, should already be marked as "in data"
                     break;
             }
-        }
-
-        if ($results->isMaxRowsReached() == 1) {
-            echo "Bounced off the limiter, applying offset and trying for more records\n";
-            $offsetAmt+= $offset;
-        } else {
-            $finished = true;
         }
     }
 }
