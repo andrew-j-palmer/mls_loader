@@ -33,6 +33,7 @@ $class_and_query = array(
 //media search params - not likely to change too much
 $resourcetype = "Property";
 $mediatype = "HQPhoto";
+$mediaIdentifier = "ListingID";
 
 //MLS notes
 

@@ -110,7 +110,7 @@ foreach ($class_and_query as $class => $query) {
                 'Format' => 'COMPACT-DECODED',
                 'Limit' => 999999,
                 'StandardNames' => 0, // give system names
-                'Select' => queryFields($listing),
+                //'Select' => queryFields($listing),
                 'Offset' => $offsetAmt
             ]
         );

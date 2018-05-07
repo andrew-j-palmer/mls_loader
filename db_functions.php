@@ -46,16 +46,20 @@ function makeIncremental($mls, $query, $field) {
     }
 }
 
+/* Doesn't appear as though adding specific select fields is a good idea - 
+Searches don't seem to go any faster and some servers reject 
+fields that otherwise appear to be valid
 function queryFields($listing) {
     $fields = "";
-    foreach ($listing as $field => $map) {
-        if ($field !== "" && $map !== "inData" && $map !== "PhotoUrls") {
-            $fields .= $map.",";
+    foreach ($listing as $field => $mapping) {
+        if ($mapping !== "" && $field !== "inData" && $field !== "PhotoUrls") {
+            $fields .= $mapping.",";
         }
     }
     $preppedfields = substr($fields, 0, -1);
     return $preppedfields;
 }
+*/
 
 function checkListing($mls, $mlsnum, $timestamp) {
     /* NEEDS TO:
@@ -158,22 +162,33 @@ function inData($mls, $mlsnums) {
     $oldNums->execute(array($mls));
     $comparenums = $oldNums->fetchAll();
     $dbnums = array_column($comparenums, 'MLSNumber');
-    $dumps = array_diff($mlsnums, $dbnums);
+    $dumps = array_diff($dbnums, $mlsnums);
     foreach ($dumps as $dump) {
         echo "deleting $dump\n";
-        $update = $db->prepare("update listingsimport set InData = 0 where mlsname = ? and mlsnumber = ?");
-        $update->execute(array($mls, $dump));
+        $update = $db->prepare("update listingsimport set indata = 0 where mlsname = ? and mlsnumber = ?");
+        $update->execute([$mls, $dump]);
     }
     echo count($dumps)." records marked for delete\n";
 }
 
 function deleteListings($mls){
-    global $db;
+    global $db, $mediaFormat;
+    if ($mediaFormat === 'binary') {
+        $delPhotoData = $db->prepare('select PhotoUrls from listingsimport where mlsname = ? and inData = 0');
+        $delPhotoData->execute([$mls]);
+        $deletedPhotos = $delPhotoData->fetchAll();
+        foreach ($deletedPhotos as $delete) {
+            $paths = explode("|", $delete[0]);
+            foreach ($paths as $path) {
+                unlink($path);
+            }
+        }
+    }
     //for incremental, we want to delete everything that hasn't been marked "in data"
     //for full pulls, wipe it all first because we're going to see every listing anyway
     //we don't have to worry about checking moddates, etc - that's what the importer's for
-    $delQuery = $db->prepare('delete from listingsimport where mlsname = ? and indata = 0');
-    $delQuery->execute(array($mls));
+    $delQuery = $db->prepare('delete from listingsimport where MLSName = ? and inData = 0');
+    $delQuery->execute([$mls]);
     $deleted = $delQuery->rowCount(); 
     return $deleted;
 }
