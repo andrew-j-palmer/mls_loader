@@ -33,7 +33,6 @@ $resourcetype = "PROPERTY";
 $mediatype = "1600x1200";
 $mediaclass = "Media";
 $mediaIdentifier = "matrix_unique_id";
-$useMediaClass = false; // T/F, T has separate Media Class Query and F uses GetObject during regular property data pull
 //MLS notes
 
 ?>

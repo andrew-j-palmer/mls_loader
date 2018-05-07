@@ -96,7 +96,6 @@ foreach ($class_and_query as $class => $query) {
     $offsetAmt = 1;
     $finished = false;
 
-    echo "Adding Timestamp to existing query...\n";
     $query = makeIncremental($mls,$query,$listing['ModificationTimestamp']);
     echo "Query:".$query."\n";
 
@@ -111,6 +110,7 @@ foreach ($class_and_query as $class => $query) {
                 'Format' => 'COMPACT-DECODED',
                 'Limit' => 999999,
                 'StandardNames' => 0, // give system names
+                'Select' => queryFields($listing),
                 'Offset' => $offsetAmt
             ]
         );

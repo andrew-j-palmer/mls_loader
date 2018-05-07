@@ -35,13 +35,26 @@ function makeIncremental($mls, $query, $field) {
     $result = $lastrun->fetch();
     //if there's no successful runs in db, we want full pull (new mls)
     //therefore, don't add incremental query
-    if ($result) {
+    if (isset($result['time'])) {
+        echo "Adding Timestamp to existing query...\n";
         $timestamp = preg_replace("/ /", "T", $result['time']);
         $incremental = '('.$field.'='.$timestamp.'+),'.$query;
         return $incremental;
     } else {
+        echo "no successful run, doing full pull\n";
         return $query;
     }
+}
+
+function queryFields($listing) {
+    $fields = "";
+    foreach ($listing as $field => $map) {
+        if ($field !== "" && $map !== "inData" && $map !== "PhotoUrls") {
+            $fields .= $map.",";
+        }
+    }
+    $preppedfields = substr($fields, 0, -1);
+    return $preppedfields;
 }
 
 function checkListing($mls, $mlsnum, $timestamp) {
@@ -139,18 +152,19 @@ function updateListing($listing, $id) {
 
 function inData($mls, $mlsnums) {
     global $db;
-    $oldNums = $db->prepare("select mlsnumber from listingsimport where mlsname = ?");
+    $markAll = $db->prepare("update listingsimport set inData = 1 where mlsname = ?");
+    $markAll->execute(array($mls));
+    $oldNums = $db->prepare("select MLSNumber from listingsimport where mlsname = ?");
     $oldNums->execute(array($mls));
     $comparenums = $oldNums->fetchAll();
-    $dbnums = array_column($comparenums, 'mlsnumber');
-    $keepers = array_diff($dbnums, $mlsnums);
-    foreach ($keepers as $keeper) {
-        $update = $db->prepare("update listingsimport set InData = 1 where mlsname = ? and mlsnumber = ?");
-        $update->execute(array($mls, $keeper));
+    $dbnums = array_column($comparenums, 'MLSNumber');
+    $dumps = array_diff($mlsnums, $dbnums);
+    foreach ($dumps as $dump) {
+        echo "deleting $dump\n";
+        $update = $db->prepare("update listingsimport set InData = 0 where mlsname = ? and mlsnumber = ?");
+        $update->execute(array($mls, $dump));
     }
-    echo count($keepers)." records marked for delete\n";
-    
-    
+    echo count($dumps)." records marked for delete\n";
 }
 
 function deleteListings($mls){

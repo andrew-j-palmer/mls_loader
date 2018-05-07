@@ -33,7 +33,6 @@ $mediaClass = "media";
 $mediaIdentifier = "MlsNum";
 $PhotoOrderField = "DisplayOrder";
 $PhotoUrlField = "PhotoHR";
-$useMediaClass= true;
 //MLS notes
 
 ?>

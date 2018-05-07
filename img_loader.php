@@ -10,42 +10,41 @@ function imageLoader($listing, $mediaFormat) {
 
     $resultlist = "";
 
-    if (!$useMediaClass) {
-
-        //this portion uses GetObject as a sort of sub-query within the regular property search
-        if ($mediaFormat === "url") {
-            //echo "getting photo URLS\n";
-            $images = $rets->GetObject($resourcetype, $mediatype, $listing[$mediaIdentifier], '*', 1);
-            foreach ($images as $image) {
-                $resultlist .= $image -> getlocation();
-                //need to add separator or the urls run together
-                $resultlist .= "|";
-            }
-            return $resultlist;
+    //this portion uses GetObject as a sort of sub-query within the regular property search
+    if ($mediaFormat === "url") {
+        //echo "getting photo URLS\n";
+        $images = $rets->GetObject($resourcetype, $mediatype, $listing[$mediaIdentifier], '*', 1);
+        foreach ($images as $image) {
+            $resultlist .= $image -> getlocation();
+            //need to add separator or the urls run together
+            $resultlist .= "|";
+        }
+        return $resultlist;
+    } elseif ($mediaFormat === "binary") {
+        //echo "Binary data files - ";
+        //if the above doesn't work, we'll have to change $mediaFormat in config to "binary"
+        //and save binary image data locally
+        $filepath = './Photos/'.$mls;
+        if ( (file_exists($filepath)) && (is_dir($filepath))) {
+            /*add something here to determine if we need new photos or not. I don't
+            want to keep writing the same images every pull like I'm doing now */
+            //echo "writing image files to $filepath...\n";
         } else {
-            //echo "Binary data files - ";
-            //if the above doesn't work, we'll have to change $mediaFormat in config to "binary"
-            //and save binary image data locally
-            $filepath = './Photos/'.$mls;
-            if ( (file_exists($filepath)) && (is_dir($filepath))) {
-                //echo "writing image files to $filepath...\n";
-            } else {
-                //echo "directory structure doesn't exist, attempting to create $filepath...\n";
-                mkdir($filepath, 0777, true);
-            }
-            //time for image stuff here, this is for URLS, need to tweak
-            $images = $rets->GetObject($resourcetype, $mediatype, $listing[$mediaIdentifier], '*');
-            
-            foreach ($images as $image) {
-                $mlsnum = $image->getContentId();
-                $mlsnum .= $image->getObjectId();
-                $filenameHash = hash('md5', $mlsnum);
-                $data = $image->getContent();
-                $filefullpath = $filepath.'/'.$filenameHash.'.jpg';
-                file_put_contents($filefullpath, $data);
-                $resultlist .=$filefullpath;
-                $resultlist .= "|";
-            }
+            //echo "directory structure doesn't exist, attempting to create $filepath...\n";
+            mkdir($filepath, 0777, true);
+        }
+        //time for image stuff here, this is for URLS, need to tweak
+        $images = $rets->GetObject($resourcetype, $mediatype, $listing[$mediaIdentifier], '*');
+        
+        foreach ($images as $image) {
+            $mlsnum = $image->getContentId();
+            $mlsnum .= $image->getObjectId();
+            $filenameHash = hash('md5', $mlsnum);
+            $data = $image->getContent();
+            $filefullpath = $filepath.'/'.$filenameHash.'.jpg';
+            file_put_contents($filefullpath, $data);
+            $resultlist .=$filefullpath;
+            $resultlist .= "|";
         }
         return $resultlist;
     }

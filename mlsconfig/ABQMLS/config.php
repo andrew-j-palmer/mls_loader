@@ -35,4 +35,9 @@ $class_and_query = array(
 $resourcetype = "Property";
 $mediatype = "HiRes";
 
+//Agent class search params
+$agentResource = "ActiveAgent";
+$agentClass = "Agent";
+
+
 ?>

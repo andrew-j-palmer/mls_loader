@@ -71,21 +71,24 @@ $listing = array(
 );
 
 $agent = array(
-    "Active" => '',
-    "AgentID" => '',
-    "AgentEmail" => '',
-    "AgentPhone1" => '',
-    "AgentPhone2" => '',
-    "AgentUrl" => '',
+    "Active" => 'ACTIVE',
+    "AgentID" => 'MEMBER_0',
+    "AgentEmail" => 'MEMBER_10',
+    "AgentFirstName" => 'MEMBER_3',
+    "AgentFullName" => 'MEMBER_19',
+    "AgentLastName" => 'MEMBER_4',
+    "AgentPhone1" => 'MEMBER_6',
+    "AgentPhone2" => 'MEMBER_7',
+    "AgentUrl" => 'MEMBER_11',
     "OfficeAddress" => '',
     "OfficeEmail" => '',
-    "OfficeID" => '',
+    "OfficeID" => 'MEMBER_1',
     "OfficeName" => '',
-    "OfficePhone" => '',
-    "OfficeState" => '',
-    "OfficeStreetname" => '',
-    "OfficeStreetNumber" => '',
+    "OfficePhone" => 'MEMBER_5',
+    "OfficeState" => 'MEMBER_15',
+    "OfficeStreetname" => 'MEMBER_12',
+    "OfficeStreetNumber" => 'MEMBER_13',
     "OfficeUnitNumber" => '',
-    "OfficeZip" => ''
+    "OfficeZip" => 'MEMBER_16'
 );
 ?>

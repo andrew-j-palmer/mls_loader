@@ -33,7 +33,6 @@ $resourcetype = "Property";
 $mediatype = "Photo";
 //$mediaclass = "Media";
 $mediaIdentifier = "L_ListingID";
-//$useMediaClass = false; // T/F, T has separate Media Class Query and F uses GetObject during regular property data pull
 /*MLS notes
 There is a support Forum that Black Knight runs, it may come in handy some day:
 vendorsupport.paragonrels.com

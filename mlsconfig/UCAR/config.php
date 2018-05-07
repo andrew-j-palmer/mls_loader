@@ -27,7 +27,6 @@ $class_and_query = array(
 // media search params - not likely to change as much from MLS to MLS
 $resourcetype = "Property";
 $mediatype = "Photo";
-$useMediaClass = false;
 $offset = 1000;
 $mediaIdentifier = "MST_MLS_NUMBER";
 
