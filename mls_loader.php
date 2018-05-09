@@ -20,7 +20,7 @@ require("./mlsconfig/$mls/mappings.php");
 require("./mlsconfig/$mls/transform.php");
 require("./img_loader.php");
 require("./listing_db_functions.php");
-require("./listing_db_functions.php");
+require("./agent_db_functions.php");
 
 //new hotness logging - start log here, write "success" to record later
 $logId = startRunLog($mls, $starttime);
