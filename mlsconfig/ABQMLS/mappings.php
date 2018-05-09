@@ -71,7 +71,6 @@ $listing = array(
 );
 
 $agent = array(
-    "Active" => 'ACTIVE',
     "AgentID" => 'MEMBER_0',
     "AgentEmail" => 'MEMBER_10',
     "AgentFirstName" => 'MEMBER_3',
@@ -80,15 +79,24 @@ $agent = array(
     "AgentPhone1" => 'MEMBER_6',
     "AgentPhone2" => 'MEMBER_7',
     "AgentUrl" => 'MEMBER_11',
-    "OfficeAddress" => '',
-    "OfficeEmail" => '',
+    "MLS" => $mls,
     "OfficeID" => 'MEMBER_1',
-    "OfficeName" => '',
-    "OfficePhone" => 'MEMBER_5',
-    "OfficeState" => 'MEMBER_15',
-    "OfficeStreetname" => 'MEMBER_12',
-    "OfficeStreetNumber" => 'MEMBER_13',
-    "OfficeUnitNumber" => '',
-    "OfficeZip" => 'MEMBER_16'
+    "Timestamp" => 'TIMESTAMP'
 );
+
+$office = array(
+    "MLS" => $mls,
+    "OfficeAddress1" => 'OFFICE_10',
+    "OfficeAddress2" => 'OFFICE_11',
+    "OfficeCity" => 'OFFICE_12',
+    "OfficeEmail" => 'OFFICE_8',
+    "OfficeID" => 'OFFICE_0',
+    "OfficeName" => 'OFFICE_2',
+    "OfficePhone" => 'OFFICE_3',
+    "OfficeState" => 'OFFICE13',
+    "OfficeUnitNumber" => '',
+    "OfficeZip" => 'OFFICE_14',
+    "Timestamp" => 'TIMESTAMP'
+);
+
 ?>

@@ -71,12 +71,17 @@ $listing = array(
 );
 
 $agent = array(
-    "Active" => '',
     "AgentID" => '',
     "AgentEmail" => '',
     "AgentPhone1" => '',
     "AgentPhone2" => '',
     "AgentUrl" => '',
+    "MLS" => '',
+    "OfficeID" => ''
+);
+
+$office = array(
+    "MLS" => '',
     "OfficeAddress" => '',
     "OfficeEmail" => '',
     "OfficeID" => '',
@@ -87,5 +92,5 @@ $agent = array(
     "OfficeStreetNumber" => '',
     "OfficeUnitNumber" => '',
     "OfficeZip" => ''
-);
+)
 ?>
