@@ -46,7 +46,7 @@ function queryFields($listing) {
 }
 */
 
-function checkAgent($mls, $mlsnum, $timestamp) {
+function checkAgent($mls, $agentID, $timestamp) {
     /* NEEDS TO:
     - see if an id exists for a listing (see if we have it yet)
     - if we DON'T have id, insert record
@@ -56,15 +56,15 @@ function checkAgent($mls, $mlsnum, $timestamp) {
     need to RETURN ID if we have it
     */
     global $db;
-    $query = $db->prepare("select ModificationTimestamp, id from agentsimport where AgentID = ? and MLSName = ? limit 1");
-    $query-> execute(array($mlsnum, $mls));
+    $query = $db->prepare("select Timestamp, ID from agentsimport where AgentID = ? and MLSName = ? limit 1");
+    $query-> execute(array($agentID, $mls));
     $return = $query->fetchAll();
     $update = array_pop($return);
-    //echo $timestamp." - ".$update['ModificationTimestamp']."\n";
+    //echo $timestamp." - ".$update['Timestamp']."\n";
     $state = array('action' => '', 'id' => '');
-    if (isset($update['id'])) {
-        $state['id'] = $update['id'];
-        if (strcmp($timestamp, $update['ModificationTimestamp']) !== 0) {
+    if (isset($update['ID'])) {
+        $state['ID'] = $update['ID'];
+        if (strcmp($timestamp, $update['Timestamp']) !== 0) {
             $state['action'] = "update";
             return $state;
         } 
@@ -83,21 +83,22 @@ function checkAgent($mls, $mlsnum, $timestamp) {
 
 function insertAgent($listing) {
     global $db;
-    $insert = $db->prepare("insert into agentsimport (
-        ) values (
-        )");
-    $insert->execute($listing);
+    $insert = $db->prepare("insert into agentsimport (inData,AgentID,AgentEmail,AgentFirstName,
+    AgentFullName,AgentLastName,AgentPhone1,AgentPhone2,AgentUrl,MLSName,OfficeID,Timestamp
+    ) values (:inData,:AgentID,:AgentEmail,:AgentFirstName,
+    :AgentFullName,:AgentLastName,:AgentPhone1,:AgentPhone2,:AgentUrl,:MLSName,:OfficeID,:Timestamp)");
+    $insert->execute($agent);
 }
 
-function updateAgent($listing, $id) {
+function updateAgent($agent, $id) {
     $listing['id'] = $id;
     //var_dump($listing); exit;
     global $db;
     //DEFINITELY 67 bound parameters
-    $update = $db->prepare("update agentsimport set 
-        
-        where id = :id");
-    $update->execute($listing);
+    $update = $db->prepare("update agentsimport set inData=:inData,AgentID=:AgentID,AgentEmail=:AgentEmail,AgentFirstName=:AgentFirstName,
+    AgentFullName=:AgentFullName,AgentLastName=:AgentLastName,AgentPhone1=:AgentPhone1,AgentPhone2=:AgentPhone2,AgentUrl=:AgentUrl,MLSName=:MLSName,OfficeID=:OfficeID,Timestamp=:Timestamp 
+    where id = :id");
+    $update->execute($agent);
 
 }
 
@@ -130,7 +131,7 @@ function deleteAgents($mls){
 }
 
 function resetAgents($mls) {
-    echo "resetting listings back to unseen\n";
+    echo "resetting agents back to unseen\n";
     global $db;
     $resetQuery = $db->prepare('update agentsimport set indata = 0 where mlsname = ?');
     $resetQuery->execute(array($mls));

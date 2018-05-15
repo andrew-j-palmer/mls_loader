@@ -91,6 +91,77 @@ $deletes = deleteListings($mls);
 echo $deletes." listings deleted\n";
 
 
+
+//pull in agent data and enter/update agentsimport table
+foreach ($class_and_query as $class => $query) {
+    echo "\e[32mStarting Agents class at ".date("c")."\e[0m\n";
+    $offsetAmt = 1;
+    $finished = false;
+
+    $query = makeIncremental($mls,$query,$agent['Timestamp']);
+    echo "Query:".$query."\n";
+
+    while ($finished == false) {
+        $results = $rets->Search(
+            $resource,
+            $class,
+            $query,
+            [
+                'QueryType' => 'DMQL2',
+                'Count' => 1, // count and records
+                'Format' => 'COMPACT-DECODED',
+                'Limit' => 999999,
+                'StandardNames' => 0, // give system names
+                //'Select' => queryFields($listing),
+                'Offset' => $offsetAmt
+            ]
+        );
+        $remainingRecords = $results->getTotalResultsCount()."\n";
+        $remainingRecords -= $offsetAmt;
+        echo "Records left to grab: ".$remainingRecords."\n";
+        foreach ($results as $record) {
+            //init empty listing using mapping model
+            $newlisting = $listing;
+            //now go through each listing field and fill if possible
+            foreach ($newlisting as $key => $item) {
+                //echo $key."\t".$record[$item]."\t".redefineVals($key, $record[$item], $newlisting, $record)."\n";
+                $newlisting[$key] = redefineVals($key, $record[$item], $newlisting,$record);
+            }
+            //Do we still need this? I'm mapping indata = 1 when creating the listing object
+            //$newlisting['inData'] = 1;
+            //let's try to add photos to array at the end while we're at it
+            $newlisting['PhotoUrls'] = imageLoader($record, $mediaFormat);
+            array_push($mappedresults, $newlisting);
+            //var_dump($newlisting);
+        }
+
+        if ($results->isMaxRowsReached() == 1) {
+            echo "\e[0;36mBounced off the limiter, applying offset and trying for more records\e[0m\n";
+            $offsetAmt+= $offset;
+        } else {
+            $finished = true;
+        }
+        //results are loaded up, now decide what we need to do with them
+        foreach ($mappedresults as $result) {  
+            $status = checkListing($result['MLSName'], $result['MLSNumber'], $result['ModificationTimestamp']);
+            switch ($status['action']) {
+                case "update":
+                    updateListing($result, $status['id']);
+                    break;
+                case "insert":
+                    insertListing($result);
+                    break;
+                case "current":
+                    //do nothing, should already be marked as "in data"
+                    break;
+            }
+        }
+    }
+}
+
+
+
+
 //loop through the various property classes
 foreach ($class_and_query as $class => $query) {
     echo "\e[32mNew property class at ".date("c")."\e[0m\n";
@@ -159,7 +230,7 @@ foreach ($class_and_query as $class => $query) {
 }
 //almost done, let's reset that inData in DB for future runs
 resetListings($mls);
-
+resetAgents($mls);
 
 /*more old-ass logging
 $logstring .= "- finished with ".count($mappedresults)." transformed results at ".date('m/d/Y h:i:s')."\n";
