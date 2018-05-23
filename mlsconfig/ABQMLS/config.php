@@ -8,6 +8,7 @@ $UA = '';
 $UAPass = '123456';
 $version = 'RETS/1.5';
 
+
 /*listing search params - queries will be different every time
 * incremental - true or false depending on whether you want to grab every record every run
 * NOTE - keep false for first run, so you get a full pull

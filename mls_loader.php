@@ -10,6 +10,7 @@ $mls = $argv[1];
 date_default_timezone_set('America/Chicago');
 $starttime = date('Y-m-d H:i:s');
 
+
 /*old and busted logging
 $logstring = "Started $mls pull at ".$starttime;
 $logfile = "./mlsconfig/$mls/datarun.log";
@@ -98,7 +99,7 @@ foreach ($class_and_query as $class => $query) {
     $offsetAmt = 1;
     $finished = false;
 
-    $query = makeIncremental($mls,$query,$agent['Timestamp']);
+    $query = makeAgentIncremental($mls,$query,$agent['Timestamp']);
     echo "Query:".$query."\n";
 
     while ($finished == false) {

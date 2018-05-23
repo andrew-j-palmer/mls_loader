@@ -27,6 +27,7 @@ function finishRunLog($id) {
     $runlog->execute(array($id));
 }
 
+
 function makeIncremental($mls, $query, $field) {
     echo "running makeIncremental..\n";
     global $db;

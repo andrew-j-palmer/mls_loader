@@ -12,6 +12,7 @@ $superscootermode = $db->query("set session sql_mode = 'NO_ENGINE_SUBSTITUTION';
 $superscootermode->execute();
 //SCOOTER MODE ENGAGED
 
+
 function makeAgentIncremental($mls, $query, $field) {
     echo "running makeIncremental..\n";
     global $db;
