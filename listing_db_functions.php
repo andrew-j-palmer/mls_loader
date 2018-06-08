@@ -47,21 +47,6 @@ function makeIncremental($mls, $query, $field) {
     }
 }
 
-/* Doesn't appear as though adding specific select fields is a good idea - 
-Searches don't seem to go any faster and some servers reject 
-fields that otherwise appear to be valid
-function queryFields($listing) {
-    $fields = "";
-    foreach ($listing as $field => $mapping) {
-        if ($mapping !== "" && $field !== "inData" && $field !== "PhotoUrls") {
-            $fields .= $mapping.",";
-        }
-    }
-    $preppedfields = substr($fields, 0, -1);
-    return $preppedfields;
-}
-*/
-
 function checkListing($mls, $mlsnum, $timestamp) {
     /* NEEDS TO:
     - see if an id exists for a listing (see if we have it yet)

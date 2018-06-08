@@ -11,11 +11,6 @@ date_default_timezone_set('America/Chicago');
 $starttime = date('Y-m-d H:i:s');
 
 
-/*old and busted logging
-$logstring = "Started $mls pull at ".$starttime;
-$logfile = "./mlsconfig/$mls/datarun.log";
-*/
-
 require("./mlsconfig/$mls/config.php");
 require("./mlsconfig/$mls/mappings.php");
 require("./mlsconfig/$mls/transform.php");
@@ -128,8 +123,7 @@ foreach ($class_and_query as $class => $query) {
                 //echo $key."\t".$record[$item]."\t".redefineVals($key, $record[$item], $newlisting, $record)."\n";
                 $newlisting[$key] = redefineVals($key, $record[$item], $newlisting,$record);
             }
-            //Do we still need this? I'm mapping indata = 1 when creating the listing object
-            //$newlisting['inData'] = 1;
+
             //let's try to add photos to array at the end while we're at it
             $newlisting['PhotoUrls'] = imageLoader($record, $mediaFormat);
             array_push($mappedresults, $newlisting);
@@ -198,8 +192,7 @@ foreach ($class_and_query as $class => $query) {
                 //echo $key."\t".$record[$item]."\t".redefineVals($key, $record[$item], $newlisting, $record)."\n";
                 $newlisting[$key] = redefineVals($key, $record[$item], $newlisting,$record);
             }
-            //Do we still need this? I'm mapping indata = 1 when creating the listing object
-            //$newlisting['inData'] = 1;
+
             //let's try to add photos to array at the end while we're at it
             $newlisting['PhotoUrls'] = imageLoader($record, $mediaFormat);
             array_push($mappedresults, $newlisting);
@@ -233,10 +226,6 @@ foreach ($class_and_query as $class => $query) {
 resetListings($mls);
 resetAgents($mls);
 
-/*more old-ass logging
-$logstring .= "- finished with ".count($mappedresults)." transformed results at ".date('m/d/Y h:i:s')."\n";
-file_put_contents($logfile, $logstring, FILE_APPEND);
-*/
 
 //finish cool new log - mark run as successful
 finishRunLog($logId);
