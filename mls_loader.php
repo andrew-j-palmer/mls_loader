@@ -116,7 +116,6 @@ while ($finished == false) {
     $remainingRecords -= $offsetAmt;
     echo "Records left to grab: ".$remainingRecords."\n";
     foreach ($results as $record) {
-        var_dump($record['MEMBER_3']); exit;
 		$newagent = $agent;
 		foreach ($newagent as $key => $item) {
 			$item = $record[$key];
