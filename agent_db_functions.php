@@ -67,7 +67,7 @@ function checkAgent($mls, $agentID, $timestamp) {
 
 }
 
-function insertAgent($listing) {
+function insertAgent($agent) {
     global $db;
     $insert = $db->prepare("insert into agentsimport (inData,AgentID,AgentEmail,AgentFirstName,
     AgentFullName,AgentLastName,AgentPhone1,AgentPhone2,AgentUrl,MLSName,OfficeID,Timestamp
@@ -77,7 +77,7 @@ function insertAgent($listing) {
 }
 
 function updateAgent($agent, $id) {
-    $listing['id'] = $id;
+    $agent['id'] = $id;
     //var_dump($listing); exit;
     global $db;
     //DEFINITELY 67 bound parameters

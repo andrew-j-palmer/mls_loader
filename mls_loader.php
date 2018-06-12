@@ -23,8 +23,10 @@ $logId = startRunLog($mls, $starttime);
 
 
 
-//I'm putting mapped listings in here
+//I'm putting mapped records in these
 $mappedresults = array();
+$mappedagents = array();
+$mappedoffices = array();
 
 
 //PHRETS config and session
@@ -87,73 +89,63 @@ $deletes = deleteListings($mls);
 echo $deletes." listings deleted\n";
 
 
-
 //pull in agent data and enter/update agentsimport table
-foreach ($class_and_query as $class => $query) {
-    echo "\e[32mStarting Agents class at ".date("c")."\e[0m\n";
-    $offsetAmt = 1;
-    $finished = false;
+echo "\e[32mStarting Agents class at ".date("c")."\e[0m\n";
+$offsetAmt = 1;
+$finished = false;
 
-    $query = makeAgentIncremental($mls,$query,$agent['Timestamp']);
-    echo "Query:".$query."\n";
+$agentQuery = makeAgentIncremental($mls,$agentQuery,$agent['Timestamp']);
+echo "Query:".$agentQuery."\n";
 
-    while ($finished == false) {
-        $results = $rets->Search(
-            $resource,
-            $class,
-            $query,
-            [
-                'QueryType' => 'DMQL2',
-                'Count' => 1, // count and records
-                'Format' => 'COMPACT-DECODED',
-                'Limit' => 999999,
-                'StandardNames' => 0, // give system names
-                //'Select' => queryFields($listing),
-                'Offset' => $offsetAmt
-            ]
-        );
-        $remainingRecords = $results->getTotalResultsCount()."\n";
-        $remainingRecords -= $offsetAmt;
-        echo "Records left to grab: ".$remainingRecords."\n";
-        foreach ($results as $record) {
-            //init empty listing using mapping model
-            $newlisting = $listing;
-            //now go through each listing field and fill if possible
-            foreach ($newlisting as $key => $item) {
-                //echo $key."\t".$record[$item]."\t".redefineVals($key, $record[$item], $newlisting, $record)."\n";
-                $newlisting[$key] = redefineVals($key, $record[$item], $newlisting,$record);
-            }
+while ($finished == false) {
+    $results = $rets->Search(
+        $agentResource,
+        $agentClass,
+        $agentQuery,
+        [
+            'QueryType' => 'DMQL2',
+            'Count' => 1, // count and records
+            'Format' => 'COMPACT-DECODED',
+            'Limit' => 999999,
+            'StandardNames' => 0, // give system names
+            //'Select' => queryFields($listing),
+            'Offset' => $offsetAmt
+        ]
+    );
+    $remainingRecords = $results->getTotalResultsCount()."\n";
+    $remainingRecords -= $offsetAmt;
+    echo "Records left to grab: ".$remainingRecords."\n";
+    foreach ($results as $record) {
+        var_dump($record['MEMBER_3']); exit;
+		$newagent = $agent;
+		foreach ($newagent as $key => $item) {
+			$item = $record[$key];
+		}
+		array_push($mappedagents, $newagent);
+    }
 
-            //let's try to add photos to array at the end while we're at it
-            $newlisting['PhotoUrls'] = imageLoader($record, $mediaFormat);
-            array_push($mappedresults, $newlisting);
-            //var_dump($newlisting);
-        }
-
-        if ($results->isMaxRowsReached() == 1) {
-            echo "\e[0;36mBounced off the limiter, applying offset and trying for more records\e[0m\n";
-            $offsetAmt+= $offset;
-        } else {
-            $finished = true;
-        }
-        //results are loaded up, now decide what we need to do with them
-        foreach ($mappedresults as $result) {  
-            $status = checkListing($result['MLSName'], $result['MLSNumber'], $result['ModificationTimestamp']);
-            switch ($status['action']) {
-                case "update":
-                    updateListing($result, $status['id']);
-                    break;
-                case "insert":
-                    insertListing($result);
-                    break;
-                case "current":
-                    //do nothing, should already be marked as "in data"
-                    break;
-            }
+    if ($results->isMaxRowsReached() == 1) {
+        echo "\e[0;36mBounced off the limiter, applying offset and trying for more records\e[0m\n";
+        $offsetAmt+= $offset;
+    } else {
+        $finished = true;
+    }
+    //results are loaded up, now decide what we need to do with them
+    foreach ($mappedagents as $agent) {  
+        $status = checkAgent($agent['MLS'], $agent['AgentID'], $agent['Timestamp']);
+        switch ($status['action']) {
+            case "update":
+                updateAgent($agent, $status['id']);
+                break;
+            case "insert":
+                insertAgent($agent);
+                break;
+            case "current":
+                //do nothing, should already be marked as "in data"
+                break;
         }
     }
 }
-
 
 
 

@@ -39,6 +39,10 @@ $mediatype = "HiRes";
 //Agent class search params
 $agentResource = "ActiveAgent";
 $agentClass = "Agent";
+$agentQuery = "(STATUS=1)";
 
-
+//Office Class
+$officeResource = "Office";
+$officeClass = "Office";
+$officeQuery = "(STATUS=1)";
 ?>
