@@ -3,7 +3,7 @@
 //listing mappings
 //for Matrix, will need a fair amount of customization
 $listing = array(
-"inData" => 1,
+"inData" => (int)1,
 "AddressArea" => "L_Area",
 "AddressCity" => "L_City",
 "AddressCountry" => "",
@@ -72,21 +72,17 @@ $listing = array(
 );
 
 $agent = array(
-    "Active" => '',
-    "AgentID" => '',
-    "AgentEmail" => '',
-    "AgentPhone1" => '',
-    "AgentPhone2" => '',
-    "AgentUrl" => '',
-    "OfficeAddress" => '',
-    "OfficeEmail" => '',
-    "OfficeID" => '',
-    "OfficeName" => '',
-    "OfficePhone" => '',
-    "OfficeState" => '',
-    "OfficeStreetname" => '',
-    "OfficeStreetNumber" => '',
-    "OfficeUnitNumber" => '',
-    "OfficeZip" => ''
+    "inData" => (int)1,
+    "AgentID" => 'U_AgentID',
+    "AgentEmail" => 'U_Email',
+    "AgentFirstName" => 'U_UserFirstName',
+    "AgentFullName" => '',
+    "AgentLastName" => 'U_UserLastName',
+    "AgentPhone1" => 'U_PhoneNumber1',
+    "AgentPhone2" => 'U_PhoneNumber2',
+    "AgentUrl" => 'U_WebPage',
+    "MLSName" => $mls,
+    "OfficeID" => 'U_HiddenOrgID',
+    "Timestamp" => 'U_LastTrig'
 );
 ?>

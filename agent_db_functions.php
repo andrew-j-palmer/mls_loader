@@ -34,7 +34,7 @@ function makeAgentIncremental($mls, $query, $field) {
 
 function checkAgent($mls, $agentID, $timestamp) {
     /* NEEDS TO:
-    - see if an id exists for a listing (see if we have it yet)
+    - see if an id exists for an agent (see if we have it yet)
     - if we DON'T have id, insert record
     - if we DO have id, update
 
@@ -69,7 +69,7 @@ function checkAgent($mls, $agentID, $timestamp) {
 
 function insertAgent($agent) {
     global $db;
-    $insert = $db->prepare("insert into agentsimport (inData,AgentID,AgentEmail,AgentFirstName,
+    $insert = $db->prepare("insert into agentsimport (inData, AgentID,AgentEmail,AgentFirstName,
     AgentFullName,AgentLastName,AgentPhone1,AgentPhone2,AgentUrl,MLSName,OfficeID,Timestamp
     ) values (:inData,:AgentID,:AgentEmail,:AgentFirstName,
     :AgentFullName,:AgentLastName,:AgentPhone1,:AgentPhone2,:AgentUrl,:MLSName,:OfficeID,:Timestamp)");
@@ -86,23 +86,6 @@ function updateAgent($agent, $id) {
     where id = :id");
     $update->execute($agent);
 
-}
-
-function agentsInData($mls, $agentids) {
-    global $db;
-    $markAll = $db->prepare("update agentsimport set inData = 1 where mlsname = ?");
-    $markAll->execute(array($mls));
-    $oldIDs = $db->prepare("select AgentID from listingsimport where mlsname = ?");
-    $oldIDs->execute(array($mls));
-    $compareIDs = $oldIDs->fetchAll();
-    $dbIDs = array_column($compareIDs, 'AgentID');
-    $dumps = array_diff($dbIDs, $agentids);
-    foreach ($dumps as $dump) {
-        echo "deleting $dump\n";
-        $update = $db->prepare("update agentsimport set indata = 0 where mlsname = ? and AgentID = ?");
-        $update->execute([$mls, $dump]);
-    }
-    echo count($dumps)." records marked for delete\n";
 }
 
 function deleteAgents($mls){

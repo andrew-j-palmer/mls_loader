@@ -33,6 +33,17 @@ $resourcetype = "Property";
 $mediatype = "Photo";
 //$mediaclass = "Media";
 $mediaIdentifier = "L_ListingID";
+
+//Agent class search params
+$agentResource = "ActiveAgent";
+$agentClass = "ActiveAgent";
+$agentQuery = "(U_user_is_active=1)";
+
+//Office Class
+$officeResource = "Office";
+$officeClass = "Office";
+$officeQuery = "(O_MemberOfMLS=Y)";
+
 /*MLS notes
 There is a support Forum that Black Knight runs, it may come in handy some day:
 vendorsupport.paragonrels.com

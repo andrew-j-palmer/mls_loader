@@ -94,7 +94,8 @@ echo "\e[32mStarting Agents class at ".date("c")."\e[0m\n";
 $offsetAmt = 1;
 $finished = false;
 
-$agentQuery = makeAgentIncremental($mls,$agentQuery,$agent['Timestamp']);
+//have option to make agent incremental but probably just full pull for agents
+//$agentQuery = makeAgentIncremental($mls,$agentQuery,$agent['Timestamp']);
 echo "Query:".$agentQuery."\n";
 
 while ($finished == false) {
@@ -116,9 +117,10 @@ while ($finished == false) {
     $remainingRecords -= $offsetAmt;
     echo "Records left to grab: ".$remainingRecords."\n";
     foreach ($results as $record) {
-		$newagent = $agent;
-		foreach ($newagent as $key => $item) {
-			$item = $record[$key];
+        $newagent = $agent;
+        $newagent['MLSName'] = $mls;
+		foreach ($newagent as $key => $value) {
+			$newagent[$key] = $record[$value];
 		}
 		array_push($mappedagents, $newagent);
     }
@@ -131,7 +133,7 @@ while ($finished == false) {
     }
     //results are loaded up, now decide what we need to do with them
     foreach ($mappedagents as $agent) {  
-        $status = checkAgent($agent['MLS'], $agent['AgentID'], $agent['Timestamp']);
+        $status = checkAgent($agent['MLSName'], $agent['AgentID'], $agent['Timestamp']);
         switch ($status['action']) {
             case "update":
                 updateAgent($agent, $status['id']);
@@ -145,8 +147,9 @@ while ($finished == false) {
         }
     }
 }
-
-
+//delete any agents in db that weren't in run
+$deletedAgents = deleteAgents($mls);
+echo "\e[01mDeleted $deletedAgents agent records\e[0m\n";
 
 //loop through the various property classes
 foreach ($class_and_query as $class => $query) {
@@ -213,6 +216,7 @@ foreach ($class_and_query as $class => $query) {
         }
     }
 }
+
 //almost done, let's reset that inData in DB for future runs
 resetListings($mls);
 resetAgents($mls);
