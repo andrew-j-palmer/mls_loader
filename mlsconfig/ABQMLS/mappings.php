@@ -71,6 +71,7 @@ $listing = array(
 );
 
 $agent = array(
+    "inData" => (int)1,
     "AgentID" => 'MEMBER_0',
     "AgentEmail" => 'MEMBER_10',
     "AgentFirstName" => 'MEMBER_3',
@@ -79,12 +80,13 @@ $agent = array(
     "AgentPhone1" => 'MEMBER_6',
     "AgentPhone2" => 'MEMBER_7',
     "AgentUrl" => 'MEMBER_11',
-    "MLS" => $mls,
+    "MLSName" => $mls,
     "OfficeID" => 'MEMBER_1',
     "Timestamp" => 'TIMESTAMP'
 );
 
 $office = array(
+    "inData" => (int)1,
     "MLS" => $mls,
     "OfficeAddress1" => 'OFFICE_10',
     "OfficeAddress2" => 'OFFICE_11',

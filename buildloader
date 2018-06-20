@@ -1,0 +1,59 @@
+#!/usr/bin/env php
+<?php
+
+
+require_once 'vendor/autoload.php';
+
+$create = new Commando\Command();
+$create->setHelp('USAGE: buildloader <Action> <MLS> <-t templateName> ');
+$create->argument()
+	->title('Action')
+	->require()
+	->describedAs('either "new" or "archive"')
+	->must(function($action) {
+	$actions = array ('new','archive');
+	return in_array($action, $actions);
+	});
+$create->argument()
+	->title('MLS')
+	->require()
+	->describedAs('Name of MLS to be created/archived');
+
+$create->option('t')
+	->aka('template')
+	->describedAs('Name of template to use. Choose from flexmls, innovia, matrix, navica, or paragon')
+	->must(function($template) {
+		$templates = array('flexmls', 'innovia', 'matrix', 'navica', 'paragon');
+		return in_array($template, $templates);
+	});
+
+
+$localdir = trim(`pwd`);
+$mlsDest = $localdir."/mlsconfig/".$create[1]."/";
+$templatedir = $localdir.'/templates/'.$create['t'].'/';
+$archiveDir = $localdir."/archives";
+$archiveFiles = $archiveDir."/".$create[1]."/";
+
+if ($create[0] == 'new') {
+	if (!$create['t']) {
+		echo "\e[0;33mIf creating a new MLS, you must specify a template to use. Check help and try again.\n";
+		exit;
+	}
+	echo "creating new loader using template located in \e[0;32m".$templatedir."\e[39m...\n";
+	$templateSource = $localdir."/templates/".$create['t']."/*";
+	`mkdir $mlsDest`;
+	`cp -r $templateSource $mlsDest`;
+} elseif ($create[0] == 'archive') {
+	if (is_dir($mlsDest) && !is_dir($archiveFiles)) {
+		echo "archiving MLS ".$create[1]."...\n";
+		`mkdir $archiveFiles`;
+		`mv $mlsDest $archiveDir`;
+	} else {
+		echo "\e[0;31mI can't archive that MLS. Either there is already an archive with that name,
+		 or there is no active MLS with that name. Check again.\n";
+	}
+} else {
+	echo "I'm sorry, what?";
+}
+
+?>
