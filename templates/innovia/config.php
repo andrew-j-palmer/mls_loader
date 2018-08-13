@@ -2,10 +2,10 @@
 
 //login creds
 $url = 'http://brm.rets.mlxinnovia.com/brm/login';
-$user = 'farrell456';
-$pass = 'kpDOa0qBlZ6UZwIRtIIw';
+$user = 'XXXXX';
+$pass = 'XXXXX';
 $UA = ''; 
-$UAPass = '123456'; //shouldn't need
+$UAPass = 'XXXXXX'; //shouldn't need
 $version = 'RETS/1.5'; //this may vary
 
 /*listing search params - queries may be different every time
