@@ -1,11 +1,11 @@
 <?php
 
 //login creds
-$url = 'http://matrixrets.marismatrix.com/rets/login.ashx';
-$user = 'ShowCaseIDX';
-$pass = 'ScD@1Qty';
+$url = 'XXXXXXXX';
+$user = 'XXXXX';
+$pass = 'XXXXXXX';
 $UA = 'RETS-Connector/1.2'; 
-$UAPass = '123456'; //shouldn't need
+$UAPass = 'XXXXX'; //shouldn't need
 $version = 'RETS/1.8'; //this may vary
 
 /*listing search params - queries may be different every time
