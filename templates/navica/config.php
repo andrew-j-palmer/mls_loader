@@ -2,10 +2,10 @@
 
 //login creds
 $url = 'https://rets2.navicamls.net/login.aspx';
-$user = 'Rets406-072016';
-$pass = 'Rets406UzC';
+$user = 'XXXXXX';
+$pass = 'XXXXXX';
 $UA = ''; //shouldn't need
-$UAPass = '123456'; //shouldn't need
+$UAPass = 'XXXXXX'; //shouldn't need
 $version = 'RETS/1.7.2'; //this may vary
 
 /*listing search params - queries may be different every time
