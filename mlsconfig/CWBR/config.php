@@ -1,11 +1,11 @@
 <?php
 
 //login creds
-$url = 'http://cwbr.rets.fnismls.com/rets/fnisrets.aspx/CWBR/login?rets-version=rets/1.5';
-$user = 'exitrealtyprime21';
-$pass = 'cwmls54455';
+$url = 'XXXXXXX';
+$user = 'XXXXXXX';
+$pass = 'XXXXXXX';
 $UA = 'RETS-Connector/1.2'; 
-$UAPass = '123456'; //shouldn't need
+$UAPass = 'XXXXX'; //shouldn't need
 $version = 'RETS/1.5'; //this may vary
 
 /*listing search params - queries may be different every time
