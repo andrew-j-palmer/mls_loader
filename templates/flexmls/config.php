@@ -1,11 +1,11 @@
 <?php
 
 //login creds
-$url = 'http://retsgw.flexmls.com:80/rets2_2/Login';
+$url = 'XXXXX';
 $user = '*username*';
 $pass = '*pass*';
 $UA = ''; //shouldn't need
-$UAPass = '123456'; //shouldn't need
+$UAPass = 'XXXXXX'; //shouldn't need
 $version = 'RETS/1.5'; //this may vary
 
 /*listing search params - queries may be different every time
