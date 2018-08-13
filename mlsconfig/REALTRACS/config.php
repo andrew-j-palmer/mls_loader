@@ -1,11 +1,11 @@
 <?php
 
 //login creds
-$url = 'http://rets.realtracs.com:6103/rets/login';
-$user = 'ShowcaseTech';
-$pass = '369869';
+$url = 'XXXXXXXXX';
+$user = 'XXXX';
+$pass = 'XXXXXX';
 $UA = 'ShowcaseTech/1.0'; 
-$UAPass = '123456'; //shouldn't need
+$UAPass = 'XXXXXX'; //shouldn't need
 $version = 'RETS/1.5'; //this may vary
 
 /*listing search params - queries may be different every time
