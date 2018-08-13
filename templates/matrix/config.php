@@ -2,10 +2,10 @@
 
 //login creds
 $url = 'http://matrixrets.*MLSNAMEHERE*.com/rets/login.ashx';
-$user = 'thomas123';
-$pass = 'lfdVAPWlZ02l93D3LTgu';
+$user = 'XXXXXX';
+$pass = 'XXXXX';
 $UA = 'ShowcaseRETS/1.0'; 
-$UAPass = 'ShowcaseRETS/1.0'; //shouldn't need
+$UAPass = 'XXXXXXXXX'; //shouldn't need
 $version = 'RETS/1.5'; //this may vary
 
 /*listing search params - queries may be different every time
